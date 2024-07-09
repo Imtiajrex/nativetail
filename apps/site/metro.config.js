@@ -23,14 +23,12 @@ config.resolver.nodeModulesPaths = [
 ]
 
 
-config.resolver.sourceExts.push("md", "mdx", "cjs", "mjs", "css", "txt");
+config.resolver.sourceExts.push("md", "mdx", "cjs", "mjs", "css");
 config.resolver.assetExts.push(
   'css'
 );
 
 config.transformer.babelTransformerPath = require.resolve('./transformer.js');
-
-
 
 
 module.exports = withExpoAtlas(config)

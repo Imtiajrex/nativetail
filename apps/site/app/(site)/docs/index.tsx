@@ -8,28 +8,10 @@ import { Platform } from "react-native";
 export default function index() {
 	return (
 		<TailView className="container">
-			<GitHubStyle>
-				<MediumStyle>
-					<Intro />
-				</MediumStyle>
-			</GitHubStyle>
+			<MediumStyle>
+				<Intro />
+			</MediumStyle>
 		</TailView>
-	);
-}
-
-function GitHubStyle({ children }: { children: React.ReactNode }) {
-	return (
-		<MDXStyles
-			th={{
-				paddingVertical: 6,
-				paddingHorizontal: 13,
-				borderWidth: 1,
-				borderStyle: "solid",
-				borderColor: "#30363d",
-			}}
-		>
-			{children}
-		</MDXStyles>
 	);
 }
 
@@ -74,12 +56,9 @@ function MediumStyle({ children }: { children: React.ReactNode }) {
 
 				fontSize: Platform.select({
 					web: "1rem",
-					default: "16",
+					default: "16px",
 				}),
-				marginBottom: Platform.select({
-					web: "1.25em",
-					default: 16,
-				}),
+				marginBottom: 16,
 				color: mutedColor,
 			}}
 			blockquote={{
@@ -110,7 +89,7 @@ function MediumStyle({ children }: { children: React.ReactNode }) {
 		>
 			<MDXComponents
 				components={{
-					Bacon: (props) => <Text {...props} style={{ color: "blue" }} />,
+					Bacon: <Text style={{ color: "red" }} />,
 				}}
 				hr={({ style }) => (
 					<View style={style}>

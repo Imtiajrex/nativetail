@@ -63,8 +63,10 @@
 		"@babel/core": "^7.20.0",
 		"@babel/plugin-proposal-export-namespace-from": "^7.18.9",
 		"@types/react": "~18.2.45",
+		"autoprefixer": "^10.4.19",
 		"babel-plugin-module-resolver": "^5.0.0",
 		"module-resolver": "^1.0.0",
+		"postcss": "^8.4.39",
 		"typescript": "~5.3.3"
 	}
 }

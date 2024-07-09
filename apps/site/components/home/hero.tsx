@@ -1,5 +1,6 @@
-import { Text, View } from "nativetail";
+import { Text, View, cn } from "nativetail";
 import { Button } from "@nativetail/ui";
+import DotPattern from "./dot-pattern";
 
 export default function Hero() {
 	return (
@@ -26,6 +27,16 @@ export default function Hero() {
 					Get Started
 				</Button>
 			</View>
+			<DotPattern
+				width={20}
+				height={20}
+				cx={1}
+				cy={1}
+				cr={1}
+				className={cn(
+					"[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)] "
+				)}
+			/>
 		</View>
 	);
 }

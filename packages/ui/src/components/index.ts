@@ -8,3 +8,7 @@ export * from "./dialog";
 export * from "./alert-dialog";
 export * from "./bottom-sheet";
 export * from "./actions-sheet";
+export * from "./chip";
+export * from "./blur";
+export * from "./progress";
+export * from "./counter";

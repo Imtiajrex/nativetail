@@ -9,6 +9,7 @@ import {
 	useState,
 } from "react";
 import { Modal } from "react-native";
+import { Blur } from "../blur";
 
 export type DialogProps = {
 	containerClassName?: string;
@@ -26,7 +27,7 @@ export const Dialog = forwardRef<DialogMethods, DialogProps>(function Dialog(
 	{
 		containerClassName,
 		contentClassName,
-		useBlur,
+		useBlur = true,
 		children,
 		onRequestClose,
 	}: DialogProps,
@@ -89,16 +90,14 @@ export const Dialog = forwardRef<DialogMethods, DialogProps>(function Dialog(
 					{isOpen && (
 						<View
 							className={mergeClasses(
-								"absolute overflow-hidden in:opacity-0 opacity-100 out:opacity-0 in:scale-0 scale-100 out:scale-0 z-10 bg-card/80 rounded-xl max-w-sm w-full  border border-muted/10",
+								"absolute overflow-hidden in:opacity-0 opacity-100 out:opacity-0 in:scale-0 scale-100 out:scale-0 z-10 bg-card/95 rounded-xl max-w-sm w-full  border border-muted/10",
 								contentClassName
 							)}
 							onDidAnimate={onDidAnimate}
 						>
 							{useBlur && (
-								<BlurView
+								<Blur
 									style={tw`absolute top-0 left-0 right-0 bottom-0 rounded-xl flex-1 bg-card`}
-									intensity={50}
-									experimentalBlurMethod="dimezisBlurView"
 								/>
 							)}
 

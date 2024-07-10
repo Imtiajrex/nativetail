@@ -5,6 +5,7 @@ import ActionSheet, {
 	ActionSheetProps,
 	ActionSheetRef,
 } from "react-native-actions-sheet";
+import { Blur } from "../blur";
 export type BottomSheetProps = ActionSheetProps & {
 	containerClassName?: string;
 	contentClassName?: string;
@@ -33,10 +34,8 @@ export const BottomSheet = forwardRef<ActionSheetRef, BottomSheetProps>(
 				{...props}
 			>
 				{useBlur && (
-					<BlurView
+					<Blur
 						style={tw`absolute top-0 left-0 right-0 bottom-0 rounded-xl flex-1 bg-card`}
-						intensity={50}
-						experimentalBlurMethod="dimezisBlurView"
 					/>
 				)}
 				<View className={cn("p-4 ", contentClassName)}>{children}</View>

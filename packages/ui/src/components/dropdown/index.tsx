@@ -21,6 +21,7 @@ import {
 	View as NativeView,
 	StatusBar,
 } from "react-native";
+import { Blur } from "../blur";
 
 type PositionType = {
 	width: number;
@@ -185,7 +186,7 @@ const DropdownMenu = ({
 					{isOpen && (
 						<View
 							className={mergeClasses(
-								"absolute in:scale-0 scale-100 out:scale-0 overflow-hidden z-10 bg-card/80 rounded-xl max-w-xs w-full  border border-muted/15",
+								"absolute in:scale-0 scale-100 out:scale-0 overflow-hidden z-10 bg-card/95 rounded-xl max-w-xs w-full  border border-muted/15",
 								className
 							)}
 							onDidAnimate={onDidAnimate}
@@ -199,11 +200,7 @@ const DropdownMenu = ({
 							id={"1"}
 						>
 							{useBlur && (
-								<BlurView
-									style={tw`absolute top-0 left-0 rounded-xl flex-1 `}
-									intensity={25}
-									experimentalBlurMethod="dimezisBlurView"
-								/>
+								<Blur style={tw`absolute top-0 left-0 rounded-xl flex-1 `} />
 							)}
 							{renderChildren()}
 						</View>

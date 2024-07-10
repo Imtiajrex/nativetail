@@ -12,7 +12,10 @@ import {
 	Select,
 	showToast,
 	Switch,
+	Progress,
+	Counter,
 } from "@nativetail/ui";
+import { Chip } from "@nativetail/ui";
 import { Text, useThemeContext, useTw, View } from "nativetail";
 import { useRef, useState } from "react";
 import { TextInput } from "react-native";
@@ -31,10 +34,34 @@ export default function Index() {
 				<AlertDialogContent />
 				<BottomSheetContent />
 				<ActionSheetContent />
+				<View className="flex-row gap-2">
+					<Chip text="Burger" />
+					<Chip text="Hotdogs" variant={"card"} />
+					<Chip text="Veggies" variant={"outline"} />
+					<Chip text="Sandwich" variant={"destructive"} />
+					<Chip text="Sandwich" variant={"secondary"} className="text-black" />
+					<Chip text="Sandwich" variant={"success"} />
+				</View>
+				<ProgressContent />
 			</View>
 		</View>
 	);
 }
+const ProgressContent = () => {
+	const [value, setValue] = useState(50);
+	return (
+		<>
+			<Progress progress={value} max={100} />
+			<Counter
+				value={value}
+				setValue={setValue}
+				max={100}
+				min={20}
+				containerClassName=" max-w-45"
+			/>
+		</>
+	);
+};
 const SwitchContent = () => {
 	const { colorScheme, setColorScheme } = useThemeContext();
 	return (

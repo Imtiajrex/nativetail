@@ -3,6 +3,8 @@ import { cn, Pressable, Text, useTw, View } from "nativetail";
 import { useEffect } from "react";
 import { create } from "zustand";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { AnimatePresence } from "moti";
+import { Blur } from "../blur";
 type ToastType = {
 	message: string;
 	content?: string;
@@ -33,9 +35,13 @@ export const showToast = (toast: InsertToastType) => {
 };
 export function Toaster() {
 	const toasts = useToastState((state) => state.toasts);
-	return toasts.map((toast, index) => (
-		<Toast key={toast.id} index={index} {...toast} />
-	));
+	return (
+		<AnimatePresence exitBeforeEnter>
+			{toasts.map((toast, index) => (
+				<Toast key={toast.id} index={index} {...toast} />
+			))}
+		</AnimatePresence>
+	);
 }
 
 const Toast = (
@@ -64,6 +70,7 @@ const Toast = (
 					: `bottom-[${safeInsets.bottom + 10}px]`,
 				toast.containerClassName
 			)}
+			animated
 		>
 			<Pressable
 				onPress={() => {
@@ -73,15 +80,13 @@ const Toast = (
 			>
 				<View
 					className={cn(
-						`bg-card/80 border border-muted/15 px-6 py-3 in:opacity-0 opacity-100 in:-translate-y-16  out:-translate-y-16 out:opacity-0 in:scale-0 scale-100 out:scale-0 rounded-full overflow-hidden max-w-sm w-full `,
+						`bg-card/95 border border-muted/15 px-6 py-3 in:opacity-0 opacity-100 in:-translate-y-16  out:-translate-y-16 out:opacity-0 in:scale-0 scale-100 out:scale-0 rounded-full overflow-hidden max-w-sm w-full `,
 						`translate-y-0`
 					)}
 					animated
 				>
-					<BlurView
-						intensity={75}
+					<Blur
 						style={tw`absolute top-0 left-0 rounded-xl flex-1 bg-card/50 rounded-full`}
-						experimentalBlurMethod="dimezisBlurView"
 					/>
 					<Text className="font-medium text-[16px] text-foreground">
 						{toast.message}

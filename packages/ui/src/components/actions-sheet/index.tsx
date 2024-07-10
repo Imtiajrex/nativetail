@@ -1,8 +1,8 @@
-import { BlurView } from "expo-blur";
 import { cn, useTw, View } from "nativetail";
+import { forwardRef } from "react";
+import { Blur } from "../blur";
 import { Button } from "../button";
 import { Dialog, DialogMethods } from "../dialog";
-import { forwardRef } from "react";
 
 type OptionType = {
 	text: string;
@@ -23,7 +23,7 @@ export const ActionSheet = forwardRef<DialogMethods, ActionSheetProps>(
 		{
 			containerClassName,
 			contentClassName,
-			useBlur,
+			useBlur = true,
 			onCancel,
 			children,
 			options,
@@ -42,12 +42,10 @@ export const ActionSheet = forwardRef<DialogMethods, ActionSheetProps>(
 				useBlur={false}
 				ref={ref}
 			>
-				<View className="w-full rounded-xl bg-card/80">
+				<View className="w-full rounded-xl bg-card/95">
 					{useBlur && (
-						<BlurView
+						<Blur
 							style={tw`absolute top-0 flex-1 left-0 right-0 bottom-0 rounded-xl bg-card`}
-							intensity={50}
-							experimentalBlurMethod="dimezisBlurView"
 						/>
 					)}
 					{options?.map((action, index) => (

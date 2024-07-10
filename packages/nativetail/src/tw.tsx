@@ -5,7 +5,10 @@ import { create as createStore } from "zustand";
 
 // ... and then this becomes the main function your app uses
 import { createContext, useContext, useEffect, useState } from "react";
-import { useColorScheme } from "react-native";
+import {
+	Appearance,
+	useColorScheme as useNativeColorScheme,
+} from "react-native";
 import { TailwindFn, create } from "./parser";
 type ColorSchemeType = "light" | "dark";
 type ContextType = {
@@ -37,8 +40,9 @@ export const ThemeProvider = ({
 	darkTheme?: any;
 	defaultColorScheme?: ColorSchemeType;
 }) => {
+	const nativeColorScheme = useNativeColorScheme();
 	const [colorScheme, setColorScheme] = useState<ColorSchemeType>(
-		defaultColorScheme || useColorScheme()
+		defaultColorScheme || useNativeColorScheme()
 	);
 	const tw = useTwStore((s) => s.tw);
 	useEffect(() => {
@@ -49,6 +53,9 @@ export const ThemeProvider = ({
 		useTwStore.setState({ tw: create(theme) });
 	};
 	useEffect(() => {
+		if ("setColorScheme" in Appearance) {
+			Appearance.setColorScheme(colorScheme);
+		}
 		if (colorScheme === "dark" && darkTheme) setTheme(darkTheme);
 		else if (theme) setTheme(theme);
 	}, [colorScheme]);
@@ -73,6 +80,10 @@ export const useTwContext = () => {
 		console.error("No tw context found");
 	}
 	return twContext;
+};
+export const useColorScheme = () => {
+	const themeContext = useThemeContext();
+	return [themeContext.colorScheme, themeContext.setColorScheme] as const;
 };
 export const useTw = () => {
 	const twContext = useContext(ThemeContext);

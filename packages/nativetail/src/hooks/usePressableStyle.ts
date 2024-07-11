@@ -23,18 +23,18 @@ export default function usePressableStyle({
 		activeClasses,
 		inClasses,
 		outClasses,
-	} = useMemo(() => separateClasses(className), [className, tw.memoBuster]);
+	} = useMemo(() => separateClasses(className), [className]);
 	const activeStyle = useMemo(
 		() => tw.style(animatableClasses, activeClasses),
-		[activeClasses, animatableClasses, tw]
+		[activeClasses, animatableClasses, tw, tw.memoBuster]
 	);
 	const hoverStyle = useMemo(
 		() => tw.style(animatableClasses, hoverClasses),
-		[hoverClasses, animatableClasses, tw]
+		[hoverClasses, animatableClasses, tw, tw.memoBuster]
 	);
 	const nonStateStyle = useMemo(
 		() => tw`${animatableClasses}`,
-		[animatableClasses, tw]
+		[animatableClasses, tw, tw.memoBuster]
 	);
 	const animate: MotiPressableProp = useMemo(
 		() =>
@@ -49,7 +49,7 @@ export default function usePressableStyle({
 				}
 				return nonStateStyle;
 			},
-		[activeStyle, hoverStyle, nonStateStyle, tw]
+		[activeStyle, hoverStyle, nonStateStyle, tw, tw.memoBuster]
 	);
 	const containerStyle = useContainerStyle(className);
 	const result = useMemo(
@@ -72,6 +72,7 @@ export default function usePressableStyle({
 			transition,
 			tw,
 			textClasses,
+			tw.memoBuster,
 		]
 	);
 

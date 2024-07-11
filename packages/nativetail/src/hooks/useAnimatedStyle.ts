@@ -112,11 +112,11 @@ export function usePlainStyle({ className = "", style, isText }) {
 	const tw = useTw();
 	const { textClasses } = useMemo(
 		() => separateClasses(mergeClasses(baseClass, className), isText),
-		[className, isText, baseClass, tw]
+		[className, isText, baseClass, tw, tw.memoBuster]
 	);
 	const newStyle = useMemo(
 		() => [tw.style(textClasses, className), style ?? {}],
-		[className, style, tw]
+		[className, style, tw, tw.memoBuster]
 	);
 	return {
 		style: newStyle,
@@ -133,20 +133,20 @@ export function useGroupedAnimatedStyle<T extends ViewStyle | TextStyle>({
 	const tw = useTw();
 	const { animatableClasses, groupHoverClasses, groupActiveClasses } = useMemo(
 		() => separateClasses(mergeClasses(baseClass, className), isText),
-		[className, isText, baseClass, tw]
+		[className, isText, baseClass, tw, tw.memoBuster]
 	);
 
 	const groupHoverStyles = useMemo(
 		() => tw.style(groupHoverClasses),
-		[groupHoverClasses]
+		[groupHoverClasses, tw.memoBuster, tw]
 	);
 	const groupActiveStyles = useMemo(
 		() => tw.style(groupActiveClasses),
-		[groupActiveClasses]
+		[groupActiveClasses, tw.memoBuster, tw]
 	);
 	const animatableStyles = useMemo(
 		() => tw.style(animatableClasses),
-		[animatableClasses]
+		[animatableClasses, tw.memoBuster, tw]
 	);
 	const state = useMotiPressable(
 		({ pressed, hovered }) => {
@@ -159,7 +159,7 @@ export function useGroupedAnimatedStyle<T extends ViewStyle | TextStyle>({
 			}
 			return animatableStyles;
 		},
-		[groupActiveStyles, groupHoverStyles, animatableStyles, tw]
+		[groupActiveStyles, groupHoverStyles, animatableStyles, tw, tw.memoBuster]
 	);
 	const animatedStyle = useAnimatedStyle({
 		className,

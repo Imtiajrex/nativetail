@@ -13,7 +13,7 @@ module.exports = {
 				primary: "#E57E00",
 				secondary: '#007AE5',
 				background: '#140B01',
-				card: '#4D2A01',
+				card: '#2D1801',
 				foreground: '#fff',
 				muted: '#D8D7D7',
 				success: '#4CAF50',

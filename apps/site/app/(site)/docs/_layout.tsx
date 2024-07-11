@@ -1,20 +1,23 @@
-import { useTw, View as TailView, Text } from "nativetail";
-import Intro from "../../../components/docs/intro.mdx";
+import { Text, useTw, View } from "nativetail";
+import React from "react";
 
-import { MDXStyles, MDXComponents } from "@bacons/mdx";
-import { View } from "@bacons/react-views";
+import { MDXComponents, MDXStyles } from "@bacons/mdx";
+import DocsSidebar from "components/docs-sidebar";
+import { Slot } from "expo-router";
 import { Platform } from "react-native";
 
-export default function index() {
+export default function _layout() {
 	return (
-		<TailView className="container">
-			<MediumStyle>
-				<Intro />
-			</MediumStyle>
-		</TailView>
+		<View className="max-w-7xl w-full gap-8 mx-auto lg:flex-row flex-col px-4 mt-4">
+			<DocsSidebar />
+			<View className="flex-col gap-4 flex-1">
+				<MediumStyle>
+					<Slot />
+				</MediumStyle>
+			</View>
+		</View>
 	);
 }
-
 function MediumStyle({ children }: { children: React.ReactNode }) {
 	const tw = useTw();
 

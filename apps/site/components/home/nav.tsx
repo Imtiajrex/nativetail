@@ -3,7 +3,7 @@ import { Image, Pressable, Text, View } from "nativetail";
 
 export default function Nav() {
 	return (
-		<View className="flex-row items-center gap-2 justify-between max-w-6xl mx-auto w-full px-4 pt-8">
+		<View className="flex-row items-center gap-2 justify-between max-w-7xl mx-auto w-full px-4 pt-8">
 			<Image source={require("assets/images/icon.png")} className="w-10 h-10" />
 			<View className="flex-row items-center gap-2">
 				<NavLink to="/" text="Home" />

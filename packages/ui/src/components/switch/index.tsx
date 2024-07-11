@@ -1,4 +1,11 @@
-import { cn, cva, Pressable, useTw, VariantProps, View } from "nativetail";
+import {
+	cn,
+	cva,
+	Pressable,
+	useTw,
+	VariantProps,
+	View,
+} from "@nativetail/core";
 
 const switchVariants = cva(
 	"rounded-full bg-card justify-center border p-0.5 items-start",

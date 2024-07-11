@@ -1,4 +1,4 @@
-import { TextInput, View, cn, useTw } from "nativetail";
+import { TextInput, View, cn, useTw } from "@nativetail/core";
 import { useCallback, useRef } from "react";
 import { Iconify } from "react-native-iconify";
 import { Button } from "../button";

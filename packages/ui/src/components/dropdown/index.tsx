@@ -6,7 +6,7 @@ import {
 	PressableProps,
 	useTw,
 	View,
-} from "nativetail";
+} from "@nativetail/core";
 import React, {
 	ReactNode,
 	useCallback,

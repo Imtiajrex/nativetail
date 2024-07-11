@@ -1,4 +1,4 @@
-import { View, cn } from "nativetail";
+import { View, cn } from "@nativetail/core";
 import React, { useMemo } from "react";
 export type ProgressProps = {
 	containerClassName?: string;

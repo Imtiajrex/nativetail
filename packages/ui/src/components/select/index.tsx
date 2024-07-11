@@ -1,4 +1,4 @@
-import { cn, PressableProps, Text, useTw, View } from "nativetail";
+import { cn, PressableProps, Text, useTw, View } from "@nativetail/core";
 import { Dropdown } from "../dropdown";
 import { memo, useCallback, useMemo } from "react";
 import { Iconify } from "react-native-iconify";

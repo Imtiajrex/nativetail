@@ -1,6 +1,6 @@
 import { BlurView } from "expo-blur";
 import { AnimatePresence } from "moti";
-import { cn, mergeClasses, Pressable, useTw, View } from "nativetail";
+import { cn, mergeClasses, Pressable, useTw, View } from "@nativetail/core";
 import {
 	forwardRef,
 	useCallback,

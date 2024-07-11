@@ -1,4 +1,4 @@
-import { Text, View, cn } from "nativetail";
+import { Text, View, cn } from "@nativetail/core";
 import { Button } from "@nativetail/ui";
 import DotPattern from "./dot-pattern";
 

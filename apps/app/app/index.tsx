@@ -16,7 +16,7 @@ import {
 	Counter,
 } from "@nativetail/ui";
 import { Chip } from "@nativetail/ui";
-import { Text, useThemeContext, useTw, View } from "nativetail";
+import { Text, useThemeContext, useTw, View } from "@nativetail/core";
 import { useRef, useState } from "react";
 import { TextInput } from "react-native";
 import { Iconify } from "react-native-iconify";

@@ -9,7 +9,7 @@ import {
 	separateClasses,
 	useTw,
 	VariantProps,
-} from "nativetail";
+} from "@nativetail/core";
 
 const buttonVariants = cva(
 	"flex-row gap-2 items-center justify-center rounded text-sm font-medium hover:opacity-90 active:opacity-80 opacity-100 select-none",
@@ -40,7 +40,7 @@ const buttonVariants = cva(
 		},
 	}
 );
-type ButtonProps = MotiPressableProps &
+export type ButtonProps = MotiPressableProps &
 	VariantProps<typeof buttonVariants> & {
 		text?: string;
 		disabled?: boolean;

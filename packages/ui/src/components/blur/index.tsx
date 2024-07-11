@@ -1,5 +1,5 @@
 import { BlurView, BlurViewProps } from "expo-blur";
-import { useColorScheme } from "nativetail";
+import { useColorScheme } from "@nativetail/core";
 
 export type BlurProps = BlurViewProps;
 export const Blur = (props: BlurProps) => {

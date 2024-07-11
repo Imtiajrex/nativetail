@@ -1,13 +1,13 @@
 import { Stack } from "expo-router";
 import "../global.css";
-import { ThemeProvider } from "nativetail/src/tw";
+import { ThemeProvider } from "@nativetail/core/src/tw";
 import "react-native-reanimated";
 import "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import { Toaster } from "@nativetail/ui";
-import { View } from "nativetail";
+import { View } from "@nativetail/core";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 SplashScreen.preventAutoHideAsync();
 

@@ -1,4 +1,11 @@
-import { cn, Text, TextInput, TextInputProps, useTw, View } from "nativetail";
+import {
+	cn,
+	Text,
+	TextInput,
+	TextInputProps,
+	useTw,
+	View,
+} from "@nativetail/core";
 
 type InputProps = TextInputProps & {
 	containerClassName?: string;

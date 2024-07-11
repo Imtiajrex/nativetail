@@ -1,4 +1,4 @@
-import { View, Text } from "nativetail";
+import { View, Text } from "@nativetail/core";
 import React from "react";
 
 export default function contact() {

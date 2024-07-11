@@ -1,5 +1,5 @@
 import Hero from "components/home/hero";
-import { View } from "nativetail";
+import { View } from "@nativetail/core";
 
 export default function HomePage() {
 	return (

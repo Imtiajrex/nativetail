@@ -1,7 +1,7 @@
 import Nav from "components/home/nav";
 import { Slot } from "expo-router";
-import { ScrollView, useTw, View } from "nativetail";
-import { useDeviceContext } from "nativetail/src/parser";
+import { ScrollView, useTw, View } from "@nativetail/core";
+import { useDeviceContext } from "@nativetail/core/src/parser";
 
 export default function _layout() {
 	const tw = useTw();

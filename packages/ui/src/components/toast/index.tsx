@@ -1,5 +1,5 @@
 import { BlurView } from "expo-blur";
-import { cn, Pressable, Text, useTw, View } from "nativetail";
+import { cn, Pressable, Text, useTw, View } from "@nativetail/core";
 import { useEffect } from "react";
 import { create } from "zustand";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

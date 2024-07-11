@@ -1,4 +1,4 @@
-import { cn, View } from "nativetail";
+import { cn, View } from "@nativetail/core";
 import { useCallback } from "react";
 
 export type StepperProps = {

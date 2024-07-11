@@ -34,7 +34,7 @@
 		"inline-import": "^1.2.4",
 		"metro-react-native-babel-transformer": "^0.77.0",
 		"moti": "^0.29.0",
-		"nativetail": "*",
+		"@nativetail/core": "*",
 		"patch-package": "^8.0.0",
 		"postinstall-postinstall": "^2.1.0",
 		"react": "18.2.0",

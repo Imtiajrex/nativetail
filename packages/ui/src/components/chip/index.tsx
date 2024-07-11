@@ -1,6 +1,13 @@
 import React, { useMemo } from "react";
 
-import { cn, cva, separateClasses, Text, VariantProps, View } from "nativetail";
+import {
+	cn,
+	cva,
+	separateClasses,
+	Text,
+	VariantProps,
+	View,
+} from "@nativetail/core";
 
 const chipVariants = cva(
 	"items-center justify-center self-start text-foreground rounded-full",

@@ -1,4 +1,4 @@
-import { Text, View } from "nativetail";
+import { Text, View } from "@nativetail/core";
 
 export default function about() {
 	return (

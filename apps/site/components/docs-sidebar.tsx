@@ -1,6 +1,6 @@
 import { BottomSheet, BottomSheetRef } from "@nativetail/ui";
 import { Link, usePathname } from "expo-router";
-import { cn, Pressable, Text, View } from "nativetail";
+import { cn, Pressable, Text, View } from "@nativetail/core";
 import { useMemo, useRef } from "react";
 import { SectionList } from "react-native";
 import { Iconify } from "react-native-iconify";
@@ -28,15 +28,23 @@ export default function DocsSidebar() {
 				ref={bottomSheetRef}
 				containerClassName="max-w-2xl mx-auto w-full p-4 bg-card"
 			>
-				<RoutesList />
+				<RoutesList routes={routes} />
 			</BottomSheet>
 			<View className="h-full max-w-[250px] w-full hidden lg:flex ">
-				<RoutesList />
+				<RoutesList routes={routes} />
 			</View>
 		</>
 	);
 }
-const RoutesList = () => {
+export const RoutesList = ({
+	routes,
+}: {
+	routes: {
+		title: string;
+		path: string;
+		group: string;
+	}[];
+}) => {
 	const pathname = usePathname();
 	const gropuedRoutes = useMemo(() => {
 		return routes.reduce((acc, route) => {
@@ -83,7 +91,7 @@ const RoutesList = () => {
 const routes = [
 	{
 		title: "Introduction",
-		path: "/docs/",
+		path: "/docs",
 		group: "Getting Started",
 	},
 	{

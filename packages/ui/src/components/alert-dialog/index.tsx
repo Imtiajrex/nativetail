@@ -1,4 +1,4 @@
-import { Text, View } from "nativetail";
+import { Text, View } from "@nativetail/core";
 import { forwardRef } from "react";
 import { Button } from "../button";
 import { Dialog, DialogMethods } from "../dialog";

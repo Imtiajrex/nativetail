@@ -1,10 +1,21 @@
 import { Link, usePathname } from "expo-router";
-import { Image, Pressable, Text, View } from "nativetail";
+import { Image, Pressable, Text, View } from "@nativetail/core";
 
 export default function Nav() {
 	return (
 		<View className="flex-row items-center gap-2 justify-between max-w-7xl mx-auto w-full px-4 pt-8">
-			<Image source={require("assets/images/icon.png")} className="w-10 h-10" />
+			<Link href={"/"}>
+				<View className="flex-row gap-2 items-center">
+					<Image
+						source={require("assets/images/icon.png")}
+						className="w-10 h-10"
+					/>
+					<Text className="text-foreground text-lg font-medium">
+						Native
+						<Text className="text-primary text-lg font-medium"> Tail</Text>
+					</Text>
+				</View>
+			</Link>
 			<View className="flex-row items-center gap-2">
 				<NavLink to="/" text="Home" />
 				<NavLink to="/docs" text="Docs" />

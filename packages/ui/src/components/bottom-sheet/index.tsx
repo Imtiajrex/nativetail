@@ -1,5 +1,5 @@
 import { BlurView } from "expo-blur";
-import { cn, useTw, View } from "nativetail";
+import { cn, useTw, View } from "@nativetail/core";
 import { forwardRef } from "react";
 import ActionSheet, {
 	ActionSheetProps,

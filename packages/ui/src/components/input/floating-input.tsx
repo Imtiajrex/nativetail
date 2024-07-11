@@ -1,4 +1,4 @@
-import { cn, Text, TextInput, TextInputProps, View } from "nativetail";
+import { cn, Text, TextInput, TextInputProps, View } from "@nativetail/core";
 import { useCallback, useState } from "react";
 import { create } from "zustand";
 

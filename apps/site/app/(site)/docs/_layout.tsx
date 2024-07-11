@@ -1,4 +1,4 @@
-import { Text, useTw, View } from "nativetail";
+import { Text, useTw, View } from "@nativetail/core";
 import React from "react";
 
 import { MDXComponents, MDXStyles } from "@bacons/mdx";
@@ -18,7 +18,7 @@ export default function _layout() {
 		</View>
 	);
 }
-function MediumStyle({ children }: { children: React.ReactNode }) {
+export function MediumStyle({ children }: { children: React.ReactNode }) {
 	const tw = useTw();
 
 	const cardColor = tw.color("card");

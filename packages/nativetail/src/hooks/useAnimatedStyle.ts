@@ -43,7 +43,7 @@ export const useAnimatedStyle = <T extends ViewStyle | TextStyle>({
 		nonAnimatableClasses,
 	} = useMemo(
 		() => separateClasses(mergeClasses(baseClass, className), isText),
-		[className, isText, baseClass, tw]
+		[className, isText, baseClass, tw, tw.memoBuster]
 	);
 	const parse = useCallback(
 		(...classes: string[]) => {
@@ -51,14 +51,14 @@ export const useAnimatedStyle = <T extends ViewStyle | TextStyle>({
 				parsedStyle.value = tw.style(...classes);
 			}
 		},
-		[tw]
+		[tw, tw.memoBuster]
 	);
 	const parsedStyle = useSharedValue(
 		tw.style(animatableClasses, animatedClass?.value ?? "")
 	);
 	useEffect(() => {
 		parse(animatableClasses, animatedClass?.value ?? "");
-	}, [className, animatableClasses, tw]);
+	}, [className, animatableClasses, tw, tw.memoBuster]);
 	useAnimatedReaction(
 		() => {
 			return animatedClass?.value;
@@ -66,7 +66,7 @@ export const useAnimatedStyle = <T extends ViewStyle | TextStyle>({
 		(value) => {
 			if (value) runOnJS(parse)(animatableClasses, value || "");
 		},
-		[animatableClasses, className, tw]
+		[animatableClasses, className, tw, tw.memoBuster]
 	);
 	const animatedStyle = useDerivedValue(() => {
 		return {
@@ -74,12 +74,15 @@ export const useAnimatedStyle = <T extends ViewStyle | TextStyle>({
 			...state?.__state?.value,
 			...(typeof style === "object" ? style : {}),
 		};
-	}, [className, animatableClasses, isText, style, tw]);
-	const from = useMemo(() => tw`${inClasses}`, [inClasses, tw]);
-	const exit = useMemo(() => tw`${outClasses}`, [outClasses, tw]);
+	}, [className, animatableClasses, isText, style, tw, tw.memoBuster]);
+	const from = useMemo(() => tw`${inClasses}`, [inClasses, tw, tw.memoBuster]);
+	const exit = useMemo(
+		() => tw`${outClasses}`,
+		[outClasses, tw, tw.memoBuster]
+	);
 	const newStyle = useMemo(
 		() => [tw`${nonAnimatableClasses}`, style ?? {}],
-		[nonAnimatableClasses, style, tw]
+		[nonAnimatableClasses, style, tw, tw.memoBuster]
 	);
 
 	return {

@@ -1,4 +1,4 @@
-import Intro from "components/docs/intro.mdx";
+import Intro from "components/components/intro.mdx";
 
 export default function index() {
 	return <Intro />;

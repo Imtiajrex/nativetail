@@ -89,6 +89,11 @@ export function MediumStyle({ children }: { children: React.ReactNode }) {
 				alignItems: "center",
 				paddingTop: 24,
 			}}
+			li={{
+				color: "white",
+				fontSize: 16,
+				marginBottom: 4,
+			}}
 		>
 			<MDXComponents
 				components={{

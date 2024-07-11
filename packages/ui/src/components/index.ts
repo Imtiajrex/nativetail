@@ -12,3 +12,4 @@ export * from "./chip";
 export * from "./blur";
 export * from "./progress";
 export * from "./counter";
+export * from "./tabs";

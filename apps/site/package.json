@@ -12,6 +12,7 @@
 	"dependencies": {
 		"@bacons/mdx": "^0.2.0",
 		"@mdx-js/react": "^3.0.1",
+		"@nativetail/core": "*",
 		"@nativetail/ui": "*",
 		"@svgr/core": "^8.1.0",
 		"@svgr/plugin-jsx": "^8.1.0",
@@ -34,7 +35,6 @@
 		"inline-import": "^1.2.4",
 		"metro-react-native-babel-transformer": "^0.77.0",
 		"moti": "^0.29.0",
-		"@nativetail/core": "*",
 		"patch-package": "^8.0.0",
 		"postinstall-postinstall": "^2.1.0",
 		"react": "18.2.0",
@@ -51,6 +51,7 @@
 		"react-native-toast-message": "^2.2.0",
 		"react-native-web": "~0.19.6",
 		"react-native-webview": "13.8.6",
+		"react-syntax-highlighter": "^15.5.0",
 		"readable-stream": "^4.5.2",
 		"remark-mdx-frontmatter": "^5.0.0",
 		"rn-mdx": "^0.0.7",

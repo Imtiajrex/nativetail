@@ -1,4 +1,4 @@
-import { Text, View, cn } from "@nativetail/core";
+import { Pressable, Text, View, cn } from "@nativetail/core";
 import { Button } from "@nativetail/ui";
 import DotPattern from "./dot-pattern";
 
@@ -23,7 +23,7 @@ export default function Hero() {
 				<View className="bg-primary/15 px-6 py-2 rounded-full border-primary/50 border shadow-sm text-lg text-primary  font-medium fade-in-up">
 					npm install nativetail
 				</View>
-				<Button className="scale-100 active:scale-95 duration-100  max-w-sm w-full rounded-full text-xl h-18 text-black fade-in-up">
+				<Button className="scale-100 active:scale-95 duration-100  max-w-sm w-full rounded-full text-xl h-18 text-black">
 					Get Started
 				</Button>
 			</View>

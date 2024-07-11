@@ -28,10 +28,10 @@ export default function DocsSidebar() {
 				ref={bottomSheetRef}
 				containerClassName="max-w-2xl mx-auto w-full p-4 bg-card"
 			>
-				<RoutesList routes={routes} />
+				<RoutesList routes={docRoutes} />
 			</BottomSheet>
 			<View className="h-full max-w-[250px] w-full hidden lg:flex ">
-				<RoutesList routes={routes} />
+				<RoutesList routes={docRoutes} />
 			</View>
 		</>
 	);
@@ -88,7 +88,7 @@ export const RoutesList = ({
 	);
 };
 
-const routes = [
+export const docRoutes = [
 	{
 		title: "Introduction",
 		path: "/docs",
@@ -128,30 +128,36 @@ const routes = [
 		title: "View",
 		path: "/docs/view",
 		group: "Components",
+		page: require("components/docs/view.tsx").default,
 	},
 	{
 		title: "Text",
 		path: "/docs/text",
 		group: "Components",
+		page: require("components/docs/text.tsx").default,
 	},
 	{
 		title: "ScrollView",
 		path: "/docs/scrollview",
 		group: "Components",
+		page: require("components/docs/scrollview.tsx").default,
 	},
 	{
 		title: "Pressable",
 		path: "/docs/pressable",
 		group: "Components",
+		page: require("components/docs/pressable.tsx").default,
 	},
 	{
 		title: "Image",
 		path: "/docs/image",
 		group: "Components",
+		page: require("components/docs/image.tsx").default,
 	},
 	{
 		title: "TextInput",
 		path: "/docs/textinput",
 		group: "Components",
+		page: require("components/docs/textinput.tsx").default,
 	},
 ];

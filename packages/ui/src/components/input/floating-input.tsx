@@ -7,7 +7,6 @@ import {
 	View,
 } from "@nativetail/core";
 import { useCallback, useState } from "react";
-import { create } from "zustand";
 import ShowPassword from "./show-password";
 
 type FloatingInputProps = Omit<TextInputProps, "placeholder"> & {
@@ -15,7 +14,7 @@ type FloatingInputProps = Omit<TextInputProps, "placeholder"> & {
 	label: string;
 	error?: string;
 	helperText?: string;
-	isPassword?: boolean;
+	isSecretToggleable?: boolean;
 	leftElement?: React.ReactNode;
 	rightElement?: React.ReactNode;
 };
@@ -26,7 +25,7 @@ export function FloatingInput({
 	label,
 	error,
 	className,
-	isPassword,
+	isSecretToggleable,
 	helperText,
 	leftElement,
 	rightElement,
@@ -62,7 +61,7 @@ export function FloatingInput({
 					className={cn(
 						"flex-1 p-3 bg-card rounded-xl absolute w-full h-full -z-5 pt-5 text-foreground text-[16px]",
 						className,
-						isPassword || rightElement ? "pr-12" : "",
+						isSecretToggleable || rightElement ? "pr-12" : "",
 						leftElement ? "pl-12" : ""
 					)}
 					secureTextEntry={!showPassword}
@@ -72,7 +71,7 @@ export function FloatingInput({
 				{rightElement && (
 					<View className="absolute right-2 bottom-2">{rightElement}</View>
 				)}
-				{isPassword && (
+				{isSecretToggleable && (
 					<ShowPassword
 						showPassword={showPassword}
 						setShowPassword={setShowPassword}

@@ -104,7 +104,7 @@ const FloatingPassword = () => {
 			label="Secret"
 			value={secret}
 			onChangeText={setSecret}
-			isPassword
+			isSecretToggleable
 		/>
 	);
 };
@@ -116,7 +116,7 @@ const InputContent = () => {
 			value={password}
 			onChangeText={setPass}
 			placeholder="Enter Password"
-			isPassword
+			isSecretToggleable
 		/>
 	);
 };

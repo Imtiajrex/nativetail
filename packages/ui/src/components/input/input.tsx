@@ -1,6 +1,5 @@
 import {
 	cn,
-	Pressable,
 	Text,
 	TextInput,
 	TextInputProps,
@@ -8,7 +7,6 @@ import {
 	View,
 } from "@nativetail/core";
 import { useState } from "react";
-import { Iconify } from "react-native-iconify";
 import ShowPassword from "./show-password";
 
 type InputProps = TextInputProps & {
@@ -16,7 +14,7 @@ type InputProps = TextInputProps & {
 	label: string;
 	error?: string;
 	helperText?: string;
-	isPassword?: boolean;
+	isSecretToggleable?: boolean;
 	leftElement?: React.ReactNode;
 	rightElement?: React.ReactNode;
 };
@@ -27,7 +25,7 @@ export function Input({
 	label,
 	error,
 	className,
-	isPassword,
+	isSecretToggleable,
 	rightElement,
 	helperText,
 	leftElement,
@@ -45,7 +43,7 @@ export function Input({
 				className={cn(
 					"p-3 bg-card rounded-lg w-full border border-muted/15 h-14 text-foreground -z-5 text-[16px]",
 					className,
-					isPassword || rightElement ? "pr-12" : "",
+					isSecretToggleable || rightElement ? "pr-12" : "",
 					leftElement ? "pl-12" : ""
 				)}
 				placeholderTextColor={tw.color("muted")}
@@ -59,7 +57,7 @@ export function Input({
 			)}
 			{error && <Text className="text-danger text-sm">{error}</Text>}
 
-			{isPassword && (
+			{isSecretToggleable && (
 				<ShowPassword
 					showPassword={showPassword}
 					setShowPassword={setShowPassword}

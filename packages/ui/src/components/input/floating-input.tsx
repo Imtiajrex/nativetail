@@ -1,20 +1,24 @@
-import { cn, Text, TextInput, TextInputProps, View } from "@nativetail/core";
+import {
+	cn,
+	Text,
+	TextInput,
+	TextInputProps,
+	useTw,
+	View,
+} from "@nativetail/core";
 import { useCallback, useState } from "react";
 import { create } from "zustand";
+import ShowPassword from "./show-password";
 
-type FloatingInputProps = TextInputProps & {
+type FloatingInputProps = Omit<TextInputProps, "placeholder"> & {
 	containerClassName?: string;
 	label: string;
 	error?: string;
 	helperText?: string;
+	isPassword?: boolean;
+	leftElement?: React.ReactNode;
+	rightElement?: React.ReactNode;
 };
-const useFocusSate = create<{
-	isFocused: boolean;
-	setIsFocused: (isFocused: boolean) => void;
-}>((set) => ({
-	isFocused: false,
-	setIsFocused: (isFocused: boolean) => set({ isFocused }),
-}));
 export function FloatingInput({
 	value,
 	onChangeText,
@@ -22,40 +26,76 @@ export function FloatingInput({
 	label,
 	error,
 	className,
+	isPassword,
+	helperText,
+	leftElement,
+	rightElement,
 	...props
 }: FloatingInputProps) {
+	const [isFocused, setIsFocused] = useState(false);
 	const onFocus = useCallback(() => {
-		useFocusSate.getState().setIsFocused(true);
+		setIsFocused(true);
 	}, []);
 	const onBlur = useCallback(() => {
-		useFocusSate.getState().setIsFocused(false);
+		setIsFocused(false);
 	}, []);
+	const tw = useTw();
+	const [showPassword, setShowPassword] = useState(false);
 	return (
-		<View
-			className={cn(
-				"w-full rounded-xl h-16 overflow-hidden  border border-muted/15",
-				containerClassName
-			)}
-		>
-			<Label label={label} value={value} />
-
-			<TextInput
-				onFocus={onFocus}
-				onBlur={onBlur}
-				value={value}
-				onChangeText={onChangeText}
+		<>
+			<View
 				className={cn(
-					"flex-1 p-3 bg-card rounded-xl absolute w-full h-full -z-5 pt-5 text-foreground text-[16px]",
-					className
+					"w-full rounded-xl h-16 overflow-hidden  border border-muted/15",
+					containerClassName
 				)}
-				{...props}
-			/>
-		</View>
+			>
+				<Label label={label} value={value} isFocused={isFocused} />
+
+				{leftElement && (
+					<View className="absolute left-2 bottom-2">{leftElement}</View>
+				)}
+				<TextInput
+					onFocus={onFocus}
+					onBlur={onBlur}
+					value={value}
+					onChangeText={onChangeText}
+					className={cn(
+						"flex-1 p-3 bg-card rounded-xl absolute w-full h-full -z-5 pt-5 text-foreground text-[16px]",
+						className,
+						isPassword || rightElement ? "pr-12" : "",
+						leftElement ? "pl-12" : ""
+					)}
+					secureTextEntry={!showPassword}
+					{...props}
+					placeholder=""
+				/>
+				{rightElement && (
+					<View className="absolute right-2 bottom-2">{rightElement}</View>
+				)}
+				{isPassword && (
+					<ShowPassword
+						showPassword={showPassword}
+						setShowPassword={setShowPassword}
+					/>
+				)}
+			</View>
+
+			{helperText && <Text className="text-muted text-sm">{helperText}</Text>}
+
+			{error && <Text className="text-danger text-sm">{error}</Text>}
+		</>
 	);
 }
 
-const Label = ({ label, value }: { label?: string; value?: string }) => {
-	const isFocused = useFocusSate((state) => state.isFocused);
+const Label = ({
+	label,
+	value,
+	isFocused,
+}: {
+	label?: string;
+	value?: string;
+	isFocused?: boolean;
+}) => {
 	const labelOnTop = isFocused || !!value;
 
 	return (

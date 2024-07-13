@@ -1,3 +1,4 @@
+import { Text, useThemeContext, useTw, View } from "@nativetail/core";
 import {
 	ActionSheet,
 	ActionSheetRef,
@@ -6,17 +7,17 @@ import {
 	BottomSheet,
 	BottomSheetRef,
 	Button,
+	Chip,
+	Counter,
 	Dropdown,
 	FloatingInput,
 	Input,
+	PinInput,
+	Progress,
 	Select,
 	showToast,
 	Switch,
-	Progress,
-	Counter,
 } from "@nativetail/ui";
-import { Chip } from "@nativetail/ui";
-import { Text, useThemeContext, useTw, View } from "@nativetail/core";
 import { useRef, useState } from "react";
 import { TextInput } from "react-native";
 import { Iconify } from "react-native-iconify";
@@ -29,7 +30,9 @@ export default function Index() {
 				<DropdownContent />
 				<SwitchContent />
 				<FloatingInputContent />
-				<NativeInputContent />
+				<FloatingPassword />
+				<PinContent />
+				<InputContent />
 				<SelectContent />
 				<AlertDialogContent />
 				<BottomSheetContent />
@@ -82,6 +85,40 @@ const NativeInputContent = () => {
 const FloatingInputContent = () => {
 	const [name, setName] = useState("");
 	return <FloatingInput label="Name" value={name} onChangeText={setName} />;
+};
+const PinContent = () => {
+	const [pin, setPin] = useState("");
+	return (
+		<PinInput
+			value={pin}
+			onChangeText={setPin}
+			length={6}
+			containerClassName="w-full"
+		/>
+	);
+};
+const FloatingPassword = () => {
+	const [secret, setSecret] = useState("");
+	return (
+		<FloatingInput
+			label="Secret"
+			value={secret}
+			onChangeText={setSecret}
+			isPassword
+		/>
+	);
+};
+const InputContent = () => {
+	const [password, setPass] = useState("");
+	return (
+		<Input
+			label="Password"
+			value={password}
+			onChangeText={setPass}
+			placeholder="Enter Password"
+			isPassword
+		/>
+	);
 };
 const DropdownContent = () => {
 	const tw = useTw();

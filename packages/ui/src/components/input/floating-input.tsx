@@ -38,8 +38,9 @@ export function FloatingInput({
 	const onBlur = useCallback(() => {
 		setIsFocused(false);
 	}, []);
-	const tw = useTw();
-	const [showPassword, setShowPassword] = useState(false);
+	const [showPassword, setShowPassword] = useState(
+		isSecretToggleable ? false : true
+	);
 	return (
 		<>
 			<View

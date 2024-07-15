@@ -32,7 +32,10 @@ export function Input({
 	...props
 }: InputProps) {
 	const tw = useTw();
-	const [showPassword, setShowPassword] = useState(false);
+
+	const [showPassword, setShowPassword] = useState(
+		isSecretToggleable ? false : true
+	);
 	return (
 		<View className={cn("w-full gap-1", containerClassName)}>
 			<Text className={cn("text-muted/75 duration-75 ")}>{label}</Text>

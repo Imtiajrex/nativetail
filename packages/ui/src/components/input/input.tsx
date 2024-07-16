@@ -58,6 +58,10 @@ export function Input({
 			{leftElement && (
 				<View className="absolute left-2 bottom-2">{leftElement}</View>
 			)}
+
+			{rightElement && (
+				<View className="absolute right-2 bottom-2">{rightElement}</View>
+			)}
 			{error && <Text className="text-danger text-sm">{error}</Text>}
 
 			{isSecretToggleable && (

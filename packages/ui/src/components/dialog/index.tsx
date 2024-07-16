@@ -27,7 +27,7 @@ export const Dialog = forwardRef<DialogMethods, DialogProps>(function Dialog(
 	{
 		containerClassName,
 		contentClassName,
-		useBlur = true,
+		useBlur = false,
 		children,
 		onRequestClose,
 	}: DialogProps,

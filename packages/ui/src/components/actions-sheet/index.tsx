@@ -23,7 +23,7 @@ export const ActionSheet = forwardRef<DialogMethods, ActionSheetProps>(
 		{
 			containerClassName,
 			contentClassName,
-			useBlur = true,
+			useBlur = false,
 			onCancel,
 			children,
 			options,

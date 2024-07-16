@@ -417,7 +417,6 @@ export default class UtilityParser {
 				style: {
 					userSelect: `none`,
 				},
-				userSelect: `none`,
 			});
 		}
 		const handledUtilities = [

@@ -130,7 +130,7 @@ let timeout: NodeJS.Timeout;
 const DropdownMenu = ({
 	className,
 	children,
-	useBlur = true,
+	useBlur = false,
 }: {
 	className?: string;
 	children: ReactNode;

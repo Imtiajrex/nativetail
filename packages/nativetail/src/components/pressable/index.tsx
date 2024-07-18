@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { useTw } from "../../tw";
+import { useTw } from "../../utils/theme";
 
 import { MotiPressable, MotiPressableProps } from "moti/interactions";
 import { View as NativeView } from "react-native";

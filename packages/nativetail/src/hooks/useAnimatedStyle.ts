@@ -9,8 +9,9 @@ import {
 	useDerivedValue,
 	useSharedValue,
 } from "react-native-reanimated";
-import { separateClasses, useTw } from "../../src/tw";
-import { mergeClasses } from "../utils";
+import { useTw } from "../utils/theme";
+import { separateClasses } from "../utils/tw";
+import { mergeClasses } from "../utils/utils";
 import useTransition from "./useTransition";
 
 export type AnimatedClassProps<T extends ViewStyle | TextStyle> = {

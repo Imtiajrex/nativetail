@@ -17,6 +17,8 @@ export type DialogProps = {
 	useBlur?: boolean;
 	children: React.ReactNode;
 	onRequestClose?: () => void;
+	closable?: boolean;
+	backdropClassName?: string;
 };
 let timeout: NodeJS.Timeout;
 export type DialogMethods = {
@@ -29,7 +31,9 @@ export const Dialog = forwardRef<DialogMethods, DialogProps>(function Dialog(
 		contentClassName,
 		useBlur = false,
 		children,
+		closable = true,
 		onRequestClose,
+		backdropClassName,
 	}: DialogProps,
 	ref
 ) {
@@ -70,27 +74,35 @@ export const Dialog = forwardRef<DialogMethods, DialogProps>(function Dialog(
 		}
 	}, [isOpen]);
 
+	const handleOnRequestClose =
+		onRequestClose ?? closable ? getRef().hide : undefined;
 	return (
 		<Modal
 			visible={modalOpen}
 			transparent
-			onRequestClose={onRequestClose}
+			onRequestClose={handleOnRequestClose}
 			animationType="fade"
 			statusBarTranslucent
 		>
-			<Pressable
+			<View
 				className={cn(
-					"flex-1 items-center justify-center p-4 w-full h-full bg-black/35",
+					"flex-1 items-center justify-center p-4 w-full h-full ",
 					containerClassName
 				)}
-				onPress={onRequestClose}
-				disabled={!onRequestClose}
 			>
+				<Pressable
+					onPress={handleOnRequestClose}
+					disabled={!closable && !onRequestClose}
+					className={cn(
+						"flex-1 bg-black/35 -z-10 w-full h-full absolute top-0 left-0",
+						backdropClassName
+					)}
+				/>
 				<AnimatePresence exitBeforeEnter>
 					{isOpen && (
 						<View
 							className={mergeClasses(
-								"absolute overflow-hidden in:opacity-0 opacity-100 out:opacity-0 in:scale-0 scale-100 out:scale-0 z-10 bg-card/95 rounded-xl max-w-sm w-full  border border-muted/10",
+								"absolute overflow-hidden in:opacity-0 opacity-100 out:opacity-0 in:scale-0 scale-100 out:scale-0 z-15 bg-card/95 rounded-xl max-w-sm w-full  border border-muted/10",
 								contentClassName
 							)}
 							onDidAnimate={onDidAnimate}
@@ -105,7 +117,7 @@ export const Dialog = forwardRef<DialogMethods, DialogProps>(function Dialog(
 						</View>
 					)}
 				</AnimatePresence>
-			</Pressable>
+			</View>
 		</Modal>
 	);
 });

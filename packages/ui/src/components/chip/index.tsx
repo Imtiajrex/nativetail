@@ -33,7 +33,7 @@ const chipVariants = cva(
 		},
 	}
 );
-type ChipProps = VariantProps<typeof chipVariants> & {
+export type ChipProps = VariantProps<typeof chipVariants> & {
 	text?: string;
 	textClass?: string;
 	leftElement?: React.ReactNode;

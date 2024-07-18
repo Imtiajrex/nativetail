@@ -9,7 +9,7 @@ import {
 import { useState } from "react";
 import ShowPassword from "./show-password";
 
-type InputProps = TextInputProps & {
+export type InputProps = TextInputProps & {
 	containerClassName?: string;
 	label: string;
 	error?: string;

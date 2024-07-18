@@ -1,6 +1,6 @@
 import React, { forwardRef } from "react";
 import { ScrollView as NativeScrollView } from "react-native";
-import { useTw } from "../tw";
+import { useTw } from "../utils/tw";
 type ClassNameType = {
 	className?: string;
 };

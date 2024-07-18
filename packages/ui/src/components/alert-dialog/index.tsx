@@ -39,7 +39,7 @@ export const AlertDialog = forwardRef<DialogMethods, AlertDialogProps>(
 				<View className="flex-row items-center  border-t border-muted/15">
 					<Button
 						variant="link"
-						className="flex-1 active:opacity-75 text-foreground"
+						className="flex-1 active:opacity-75 text-foreground rounded-none"
 						onPress={onCancel}
 					>
 						Cancel

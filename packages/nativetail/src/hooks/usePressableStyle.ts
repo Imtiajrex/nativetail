@@ -1,10 +1,11 @@
 import { useMemo } from "react";
-import { separateClasses, useTw } from "../tw";
+import { separateClasses } from "../utils/tw";
 
 import {
 	MotiPressableProp,
 	MotiPressableTransitionProp,
 } from "moti/interactions";
+import { useTw } from "../utils/theme";
 import useTransition from "./useTransition";
 
 export default function usePressableStyle({

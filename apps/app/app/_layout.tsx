@@ -1,14 +1,12 @@
-import { Stack } from "expo-router";
-import "../global.css";
-import { ThemeProvider } from "@nativetail/core/src/tw";
-import "react-native-reanimated";
+import { cva, ThemeProvider, View } from "@nativetail/core";
+import { ComponentThemeProvider, Toaster } from "@nativetail/ui";
+import { SplashScreen, Stack } from "expo-router";
+import { useEffect } from "react";
 import "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { SplashScreen } from "expo-router";
-import { useEffect } from "react";
-import { Toaster } from "@nativetail/ui";
-import { View } from "@nativetail/core";
+import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import "../global.css";
 SplashScreen.preventAutoHideAsync();
 
 export const unstable_settings = {
@@ -28,15 +26,23 @@ export default function _layout() {
 						theme={require("../tailwind.config.js")}
 						darkTheme={require("../dark.tailwind.config.js")}
 					>
-						<View className="flex-1 bg-background">
-							<Stack
-								screenOptions={{
-									headerShown: false,
-								}}
-							/>
+						<ComponentThemeProvider
+							components={{
+								Button: {
+									className: "active:scale-98 scale-100 rounded-2xl",
+								},
+							}}
+						>
+							<View className="flex-1 bg-background">
+								<Stack
+									screenOptions={{
+										headerShown: false,
+									}}
+								/>
 
-							<Toaster />
-						</View>
+								<Toaster />
+							</View>
+						</ComponentThemeProvider>
 					</ThemeProvider>
 				</SafeAreaProvider>
 			</GestureHandlerRootView>

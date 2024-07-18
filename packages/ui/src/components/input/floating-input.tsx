@@ -1,15 +1,8 @@
-import {
-	cn,
-	Text,
-	TextInput,
-	TextInputProps,
-	useTw,
-	View,
-} from "@nativetail/core";
+import { cn, Text, TextInput, TextInputProps, View } from "@nativetail/core";
 import { useCallback, useState } from "react";
 import ShowPassword from "./show-password";
 
-type FloatingInputProps = Omit<TextInputProps, "placeholder"> & {
+export type FloatingInputProps = Omit<TextInputProps, "placeholder"> & {
 	containerClassName?: string;
 	label: string;
 	error?: string;

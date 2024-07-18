@@ -9,6 +9,8 @@ import {
 	Button,
 	Chip,
 	Counter,
+	Dialog,
+	DialogMethods,
 	Dropdown,
 	FloatingInput,
 	Input,
@@ -26,30 +28,57 @@ export default function Index() {
 	return (
 		<View className="flex-1 bg-background">
 			<View className="container">
-				<Text className="text-foreground">Hellow</Text>
-				<DropdownContent />
-				<SwitchContent />
-				<FloatingInputContent />
-				<FloatingPassword />
-				<PinContent />
-				<InputContent />
-				<SelectContent />
-				<AlertDialogContent />
-				<BottomSheetContent />
-				<ActionSheetContent />
-				<View className="flex-row gap-2">
-					<Chip text="Burger" />
-					<Chip text="Hotdogs" variant={"card"} />
-					<Chip text="Veggies" variant={"outline"} />
-					<Chip text="Sandwich" variant={"destructive"} />
-					<Chip text="Sandwich" variant={"secondary"} className="text-black" />
-					<Chip text="Sandwich" variant={"success"} />
-				</View>
-				<ProgressContent />
+				<AllDemo />
 			</View>
 		</View>
 	);
 }
+const AllDemo = () => {
+	return (
+		<>
+			<Text className="text-foreground">Hellow</Text>
+			<DropdownContent />
+			<SwitchContent />
+			<FloatingInputContent />
+			<FloatingPassword />
+			<PinContent />
+			<InputContent />
+			<SelectContent />
+			<AlertDialogContent />
+			<BottomSheetContent />
+			<ActionSheetContent />
+			<DialogDemo />
+			<View className="flex-row gap-2">
+				<Chip text="Burger" />
+				<Chip text="Hotdogs" variant={"card"} />
+				<Chip text="Veggies" variant={"outline"} />
+				<Chip text="Sandwich" variant={"destructive"} />
+				<Chip text="Sandwich" variant={"secondary"} className="text-black" />
+				<Chip text="Sandwich" variant={"success"} />
+			</View>
+			<ProgressContent />
+		</>
+	);
+};
+const DialogDemo = () => {
+	const dialogRef = useRef<DialogMethods>(null);
+	return (
+		<>
+			<Dialog contentClassName="p-4" ref={dialogRef}>
+				<Text>Hello World from dialog!</Text>
+			</Dialog>
+			<Button
+				className="w-full"
+				variant={"outline"}
+				onPress={() => {
+					dialogRef.current?.show();
+				}}
+			>
+				Open Dialog
+			</Button>
+		</>
+	);
+};
 const ProgressContent = () => {
 	const [value, setValue] = useState(50);
 	return (

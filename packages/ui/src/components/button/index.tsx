@@ -1,8 +1,9 @@
 import React, { useMemo } from "react";
 
-import { MotiPressableProps } from "moti/interactions";
 import {
 	ActivityIndicator,
+	cn,
+	ConfigVariants,
 	cva,
 	mergeClasses,
 	Pressable,
@@ -10,6 +11,8 @@ import {
 	useTw,
 	VariantProps,
 } from "@nativetail/core";
+import { MotiPressableProps } from "moti/interactions";
+import { useComponentTheme } from "../../utils/component-theme";
 
 const buttonVariants = cva(
 	"flex-row gap-2 items-center justify-center rounded text-sm font-medium hover:opacity-90 active:opacity-80 opacity-100 select-none",
@@ -18,7 +21,7 @@ const buttonVariants = cva(
 			variant: {
 				default: "bg-primary  text-foreground ",
 				destructive: "bg-red-500 text-foreground  ",
-				outline: "border border-primary text-foreground bg-black/0  ",
+				outline: "border border-muted/15 text-foreground bg-black/0  ",
 				secondary: "bg-secondary text-foreground  ",
 				ghost: "",
 				link: "text-primary ",
@@ -40,6 +43,30 @@ const buttonVariants = cva(
 		},
 	}
 );
+type VariantPropType = (
+	props?: ConfigVariants<{
+		variant: {
+			default: string;
+			destructive: string;
+			outline: string;
+			secondary: string;
+			ghost: string;
+			link: string;
+			card: string;
+		};
+		size: {
+			default: string;
+			sm: string;
+			lg: string;
+			icon: string;
+		};
+		disabled: {
+			true: string;
+		};
+	}> & {
+		className?: string;
+	}
+) => string;
 export type ButtonProps = MotiPressableProps &
 	VariantProps<typeof buttonVariants> & {
 		text?: string;
@@ -51,36 +78,51 @@ export type ButtonProps = MotiPressableProps &
 		className?: string;
 		children?: React.ReactNode;
 		loadingIndicatorClassName?: string;
+		variants?: VariantPropType;
 	};
 
-const Button = ({
-	text,
-	children,
-	isLoading,
-	className,
-	disabled,
-	variant,
-	leftElement,
-	rightElement,
-	size,
-	loadingIndicatorClassName,
-
-	...props
-}: ButtonProps) => {
+const Button = (passedProps: ButtonProps) => {
+	const componentTheme = useComponentTheme();
+	const buttonProps = componentTheme?.Button || {};
+	const {
+		text,
+		children,
+		isLoading,
+		disabled,
+		variant,
+		leftElement,
+		rightElement,
+		size,
+		className: propClassName,
+		loadingIndicatorClassName,
+		variants,
+		...props
+	} = {
+		...buttonProps,
+		...passedProps,
+	};
 	const tw = useTw();
+	const className = cn(buttonProps.className, passedProps.className);
 
 	const loading = isLoading;
 
 	const isDisabled = disabled || loading;
 	const variantClass = useMemo(
 		() =>
-			buttonVariants({
-				variant,
-				size,
-				className,
-				disabled: isDisabled,
-			}),
-		[variant, size, className, isDisabled, tw]
+			variants
+				? variants({
+						variant,
+						size,
+						className,
+						disabled: isDisabled,
+					})
+				: buttonVariants({
+						variant,
+						size,
+						className,
+						disabled: isDisabled,
+					}),
+		[variant, size, className, isDisabled, tw, variants]
 	);
 
 	const { textClasses } = separateClasses(variantClass);

@@ -1,6 +1,6 @@
 import React, { forwardRef } from "react";
 import { TextInput as NativeTextInput } from "react-native";
-import { useTw } from "../tw";
+import { useTw } from "../utils/theme";
 type ClassNameType = {
 	className?: string;
 };

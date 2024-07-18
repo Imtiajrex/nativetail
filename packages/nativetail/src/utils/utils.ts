@@ -2,7 +2,11 @@ import { type ClassValue, clsx } from "clsx";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
-import { cva, type VariantProps } from "class-variance-authority";
+import {
+	cva,
+	type VariantProps,
+	type ConfigVariants,
+} from "class-variance-authority";
 
 export function mergeClasses(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -16,4 +20,4 @@ export const useForceUpdate = (renderOptions: any[]) => {
 	React.useEffect(forceUpdate, renderOptions);
 };
 
-export { mergeClasses as cn, cva, type VariantProps };
+export { mergeClasses as cn, cva, type VariantProps, type ConfigVariants };

@@ -1,4 +1,10 @@
-import { Text, useThemeContext, useTw, View } from "@nativetail/core";
+import {
+	ScrollView,
+	Text,
+	useThemeContext,
+	useTw,
+	View,
+} from "@nativetail/core";
 import {
 	ActionSheet,
 	ActionSheetRef,
@@ -14,6 +20,7 @@ import {
 	Dropdown,
 	FloatingInput,
 	Input,
+	MultiSelect,
 	PinInput,
 	Progress,
 	Select,
@@ -27,15 +34,13 @@ import { Iconify } from "react-native-iconify";
 export default function Index() {
 	return (
 		<View className="flex-1 bg-background">
-			<View className="container">
-				<AllDemo />
-			</View>
+			<AllDemo />
 		</View>
 	);
 }
 const AllDemo = () => {
 	return (
-		<>
+		<ScrollView className="gap-2 container" containerClass="flex-1">
 			<Text className="text-foreground">Hellow</Text>
 			<DropdownContent />
 			<SwitchContent />
@@ -44,6 +49,8 @@ const AllDemo = () => {
 			<PinContent />
 			<InputContent />
 			<SelectContent />
+			<MultiSelectDemo />
+
 			<AlertDialogContent />
 			<BottomSheetContent />
 			<ActionSheetContent />
@@ -57,7 +64,7 @@ const AllDemo = () => {
 				<Chip text="Sandwich" variant={"success"} />
 			</View>
 			<ProgressContent />
-		</>
+		</ScrollView>
 	);
 };
 const DialogDemo = () => {
@@ -113,7 +120,17 @@ const NativeInputContent = () => {
 };
 const FloatingInputContent = () => {
 	const [name, setName] = useState("");
-	return <FloatingInput label="Name" value={name} onChangeText={setName} />;
+	return (
+		<FloatingInput
+			label="Name"
+			value={name}
+			onChangeText={setName}
+			containerClassName="h-13"
+			activeLabelClassName="-translate-y-12 "
+			labelClassName="text-sm"
+			className="text-sm pt-5"
+		/>
+	);
 };
 const PinContent = () => {
 	const [pin, setPin] = useState("");
@@ -121,8 +138,10 @@ const PinContent = () => {
 		<PinInput
 			value={pin}
 			onChangeText={setPin}
-			length={6}
-			containerClassName="w-full"
+			length={4}
+			containerClassName="w-full max-w-sm mx-auto"
+			pinBoxClassName="h-14 text-xl"
+			secureTextEntry
 		/>
 	);
 };
@@ -183,6 +202,32 @@ const SelectContent = () => {
 			value={framework}
 			onChange={setFramework}
 			placeholder="Select Framework"
+			options={[
+				{
+					label: "React",
+					value: "react",
+				},
+				{
+					label: "Vue",
+					value: "vue",
+				},
+				{
+					label: "Angular",
+					value: "angular",
+				},
+			]}
+		/>
+	);
+};
+const MultiSelectDemo = () => {
+	const [framework, setFramework] = useState<string[]>([]);
+
+	return (
+		<MultiSelect
+			label="Select Multi Framworkd"
+			value={framework}
+			onChange={setFramework}
+			placeholder="Select multi frame work"
 			options={[
 				{
 					label: "React",

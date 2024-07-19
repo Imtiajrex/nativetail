@@ -215,12 +215,14 @@ const DropdownItem = ({
 	children,
 	last,
 	first,
+	autoClosable = true,
 	...props
 }: {
 	className?: string;
 	last?: boolean;
 	children: ReactNode;
 	first?: boolean;
+	autoClosable?: boolean;
 } & PressableProps) => {
 	const close = useDropdownContext().close;
 	return (
@@ -233,7 +235,7 @@ const DropdownItem = ({
 			)}
 			{...props}
 			onPress={() => {
-				close();
+				if (autoClosable) close();
 				props.onPress && props.onPress();
 			}}
 		>

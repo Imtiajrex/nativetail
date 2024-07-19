@@ -20,6 +20,10 @@ module.exports = {
 				warning: '#FFC107',
 				info: '#00BCD4',
 			},
+			borderRadius: {
+				DEFAULT: '16px',
+				"sm": "24px"
+			}
 		},
 	},
 };

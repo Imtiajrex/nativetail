@@ -19,13 +19,13 @@ export function Counter({
 	const tw = useTw();
 	const increment = useCallback(() => {
 		setValue((prev) => {
-			if (max && prev >= max) return;
+			if (max && prev >= max) return prev;
 			return prev + 1;
 		});
 	}, [setValue, max]);
 	const decrement = useCallback(() => {
 		setValue((prev) => {
-			if (min && prev <= min) return;
+			if (min && prev <= min) return prev;
 			return prev - 1;
 		});
 	}, [setValue, min]);
@@ -34,6 +34,7 @@ export function Counter({
 			const number = parseInt(text);
 
 			if (isNaN(number)) return;
+			if (!number) return;
 			setValue(number);
 		},
 		[min, max, setValue]
@@ -57,7 +58,7 @@ export function Counter({
 				<TextInput
 					className="flex-1 items-center text-center justify-center bg-card rounded-xl h-full text-foreground font-medium select-none"
 					onChangeText={onChangeText}
-					value={value.toString()}
+					value={value?.toString?.()}
 				/>
 			</View>
 			<CounterButton disabled={!!(max && value >= max)} onPress={increment}>

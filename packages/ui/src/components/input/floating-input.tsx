@@ -1,7 +1,6 @@
 import { cn, Text, TextInput, TextInputProps, View } from "@nativetail/core";
 import { useCallback, useState } from "react";
 import ShowPassword from "./show-password";
-
 export type FloatingInputProps = Omit<TextInputProps, "placeholder"> & {
 	containerClassName?: string;
 	label: string;
@@ -10,6 +9,8 @@ export type FloatingInputProps = Omit<TextInputProps, "placeholder"> & {
 	isSecretToggleable?: boolean;
 	leftElement?: React.ReactNode;
 	rightElement?: React.ReactNode;
+	labelClassName?: string;
+	activeLabelClassName?: string;
 };
 export function FloatingInput({
 	value,
@@ -22,6 +23,8 @@ export function FloatingInput({
 	helperText,
 	leftElement,
 	rightElement,
+	labelClassName,
+	activeLabelClassName,
 	...props
 }: FloatingInputProps) {
 	const [isFocused, setIsFocused] = useState(false);
@@ -42,7 +45,13 @@ export function FloatingInput({
 					containerClassName
 				)}
 			>
-				<Label label={label} value={value} isFocused={isFocused} />
+				<Label
+					label={label}
+					value={value}
+					isFocused={isFocused}
+					labelClassName={labelClassName}
+					activeLabelClassName={activeLabelClassName}
+				/>
 
 				{leftElement && (
 					<View className="absolute left-2 bottom-2">{leftElement}</View>
@@ -52,6 +61,7 @@ export function FloatingInput({
 					onBlur={onBlur}
 					value={value}
 					onChangeText={onChangeText}
+					enablesReturnKeyAutomatically
 					className={cn(
 						"flex-1 p-3 bg-card rounded-xl absolute w-full h-full -z-5 pt-5 text-foreground text-[16px]",
 						className,
@@ -84,10 +94,14 @@ const Label = ({
 	label,
 	value,
 	isFocused,
+	activeLabelClassName,
+	labelClassName,
 }: {
 	label?: string;
 	value?: string;
 	isFocused?: boolean;
+	labelClassName?: string;
+	activeLabelClassName?: string;
 }) => {
 	const labelOnTop = isFocused || !!value;
 
@@ -96,8 +110,10 @@ const Label = ({
 			<Text
 				animated
 				className={cn(
-					"text-muted duration-75  ",
-					labelOnTop ? " -translate-y-16 text-xs" : "translate-y-0 text-[16px]"
+					"text-muted duration-75 translate-y-0 text-[16px]",
+					labelClassName,
+					labelOnTop ? " -translate-y-16 text-xs" : "",
+					labelOnTop ? activeLabelClassName : ""
 				)}
 			>
 				{label}

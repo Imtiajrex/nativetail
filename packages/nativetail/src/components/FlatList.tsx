@@ -2,7 +2,7 @@ import {
 	FlatList as NativeFlatList,
 	FlatListProps as NativeFlatListProps,
 } from "react-native";
-import { useTw } from "../utils/tw";
+import { useTw } from "../utils/theme";
 type ClassNameType = {
 	className?: string;
 };

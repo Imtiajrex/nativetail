@@ -5,6 +5,7 @@ import { create } from "zustand";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AnimatePresence } from "moti";
 import { Blur } from "../blur";
+import { Iconify } from "react-native-iconify";
 type ToastType = {
 	message: string;
 	content?: string;
@@ -12,6 +13,7 @@ type ToastType = {
 	timeout?: number;
 	position?: "top" | "bottom";
 	containerClassName?: string;
+	type?: "success" | "danger" | "info" | "warning";
 };
 type InsertToastType = Omit<ToastType, "id">;
 type ToastStore = {
@@ -26,6 +28,7 @@ const useToastState = create<ToastStore>((set) => ({
 			toasts: [
 				...state.toasts,
 				{
+					type: "info",
 					position: "top",
 					...toast,
 				},
@@ -89,7 +92,7 @@ const Toast = (
 			>
 				<View
 					className={cn(
-						`bg-card/95 border border-muted/15 px-6 py-3 in:opacity-0 opacity-100 in:-translate-y-16  out:-translate-y-16 out:opacity-0 in:scale-0 scale-100 out:scale-0 rounded-full overflow-hidden max-w-sm w-full `,
+						`bg-card/95 border border-muted/15 px-6 py-2 in:opacity-0 opacity-100 in:-translate-y-16  out:-translate-y-16 out:opacity-0 in:scale-0 scale-100 out:scale-0 rounded-full overflow-hidden max-w-xs w-full `,
 						`translate-y-0`
 					)}
 					animated
@@ -97,14 +100,24 @@ const Toast = (
 					<Blur
 						style={tw`absolute top-0 left-0 rounded-xl flex-1 bg-card/50 rounded-full`}
 					/>
-					<Text className="font-medium text-[16px] text-foreground">
-						{toast.message}
-					</Text>
-					{toast.content && (
-						<Text className="text-sm text-muted">{toast.content}</Text>
-					)}
+					{/* <Icon /> */}
+					<View>
+						<Text className="font-medium text-sm text-foreground">
+							{toast.message}
+						</Text>
+						{toast.content && (
+							<Text className="text-xs text-muted">{toast.content}</Text>
+						)}
+					</View>
 				</View>
 			</Pressable>
 		</View>
 	);
+};
+
+const Icons = {
+	success: <Iconify icon="mdi:check" size={20} />,
+	danger: <Iconify icon="tabler:x" size={20} />,
+	icon: <Iconify icon="mdi:info" size={20} />,
+	warning: <Iconify icon="mdi:warning" size={20} />,
 };

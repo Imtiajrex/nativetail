@@ -1,5 +1,5 @@
 import { cn, Pressable, TextInput, View } from "@nativetail/core";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { TextInput as NativeTextInput } from "react-native";
 
 export type PinInputProps = {
@@ -11,6 +11,8 @@ export type PinInputProps = {
 	containerClassName?: string;
 	error?: string;
 	helperText?: string;
+	secureTextEntry?: boolean;
+	pinHideTime?: number;
 };
 export function PinInput({
 	value,
@@ -21,6 +23,8 @@ export function PinInput({
 	pinBoxFocusedClassName,
 	helperText,
 	length,
+	secureTextEntry,
+	pinHideTime = 300,
 	...props
 }: PinInputProps) {
 	const [isFocused, setIsFocused] = useState(false);
@@ -47,19 +51,18 @@ export function PinInput({
 	return (
 		<View className={cn(" gap-2 flex-row  w-full", containerClassName)}>
 			{Array.from({ length: length }).map((_, index) => (
-				<Pressable
+				<PinBox
 					key={`pininput-${index}`}
-					className={cn(
-						"p-2 bg-card rounded-lg items-center justify-center w-full font-medium aspect-sqaure flex-1 border border-muted/15 h-16 text-foreground text-[16px] text-center",
-						pinBoxClassName,
-						isFocused &&
-							activeIndex === index &&
-							"border-foreground" + " " + pinBoxFocusedClassName
-					)}
-					onPress={onPinBoxPress}
-				>
-					{value[index]}
-				</Pressable>
+					pinBoxClassName={pinBoxClassName}
+					isFocused={isFocused}
+					activeIndex={activeIndex}
+					index={index}
+					pinBoxFocusedClassName={pinBoxFocusedClassName}
+					onPinBoxPress={onPinBoxPress}
+					secureTextEntry={secureTextEntry}
+					value={value}
+					pinHideTime={pinHideTime}
+				/>
 			))}
 			<TextInput
 				ref={textInputRef}
@@ -73,3 +76,61 @@ export function PinInput({
 		</View>
 	);
 }
+
+const PinBox = ({
+	pinBoxClassName,
+	activeIndex,
+	index,
+	onPinBoxPress,
+	value,
+	isFocused,
+	pinBoxFocusedClassName,
+	secureTextEntry,
+	pinHideTime,
+}: {
+	pinBoxClassName?: string;
+	isFocused?: boolean;
+	activeIndex: number;
+	index: number;
+	pinBoxFocusedClassName?: string;
+	onPinBoxPress: () => void;
+	value: string;
+	secureTextEntry?: boolean;
+	pinHideTime?: number;
+}) => {
+	const pinValue = value[index];
+	const isActive = activeIndex === index;
+	const [hide, setHide] = useState(false);
+	const timeoutRef = useRef<NodeJS.Timeout>(null);
+	useEffect(() => {
+		if (!secureTextEntry) return;
+		if (pinValue) {
+			timeoutRef.current = setTimeout(() => {
+				setHide(true);
+			}, pinHideTime);
+		} else {
+			setHide(false);
+		}
+		return () => {
+			if (timeoutRef.current) clearTimeout(timeoutRef.current);
+		};
+	}, [secureTextEntry, pinValue, pinHideTime]);
+	return (
+		<Pressable
+			className={cn(
+				"p-2 bg-card rounded-lg items-center justify-center w-full font-medium aspect-sqaure flex-1 border border-muted/15 h-16 text-foreground text-[16px] text-center",
+				pinBoxClassName,
+				isFocused &&
+					isActive &&
+					"border-foreground" + " " + pinBoxFocusedClassName
+			)}
+			onPress={onPinBoxPress}
+		>
+			{hide ? (
+				<View className="w-2 h-2 rounded-full bg-foreground" />
+			) : (
+				pinValue
+			)}
+		</Pressable>
+	);
+};

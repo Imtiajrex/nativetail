@@ -1,6 +1,7 @@
 import React from "react";
 import { ActivityIndicator as NativeActivityIndicator } from "react-native";
-import { getTWColor, useTw } from "../utils/tw";
+import { useTw } from "../utils/theme";
+import { getTWColor } from "../utils/tw";
 
 type ActivityIndicatorProps = React.ComponentProps<
 	typeof NativeActivityIndicator

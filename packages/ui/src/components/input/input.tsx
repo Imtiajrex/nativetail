@@ -6,19 +6,53 @@ import {
 	useTw,
 	View,
 } from "@nativetail/core";
-import { useState } from "react";
+import React, { LegacyRef, useState } from "react";
+import { Control, Controller, Path } from "react-hook-form";
+import { TextInput as NativeTextInput } from "react-native";
 import ShowPassword from "./show-password";
 
-export type InputProps = TextInputProps & {
+export type InputProps<T = Record<string, any>> = TextInputProps & {
 	containerClassName?: string;
-	label: string;
+	label?: string;
 	error?: string;
 	helperText?: string;
 	isSecretToggleable?: boolean;
 	leftElement?: React.ReactNode;
 	rightElement?: React.ReactNode;
+	value?: string;
+	control?: Control<T, any>;
+	name?: Path<T>;
+	inputRef?: LegacyRef<NativeTextInput>;
 };
-export function Input({
+
+export const Input = <T extends Record<string, any>>({
+	name,
+	control,
+	...props
+}: InputProps<T>) => {
+	if (control) {
+		return (
+			<Controller
+				name={name}
+				control={control}
+				render={({ field }) => {
+					return (
+						<BaseInput
+							{...props}
+							value={field.value}
+							onChangeText={(text) => {
+								field.onChange(text);
+							}}
+						/>
+					);
+				}}
+			/>
+		);
+	}
+	return <BaseInput {...props} />;
+};
+
+const BaseInput = <T extends Record<string, any>>({
 	value,
 	onChangeText,
 	containerClassName,
@@ -29,8 +63,9 @@ export function Input({
 	rightElement,
 	helperText,
 	leftElement,
+	inputRef,
 	...props
-}: InputProps) {
+}: InputProps<T>) => {
 	const tw = useTw();
 
 	const [showPassword, setShowPassword] = useState(
@@ -43,6 +78,7 @@ export function Input({
 			<TextInput
 				value={value}
 				onChangeText={onChangeText}
+				ref={inputRef}
 				className={cn(
 					"p-3 bg-card rounded-lg w-full border border-muted/15 h-14 text-foreground -z-5 text-[16px]",
 					className,
@@ -72,4 +108,4 @@ export function Input({
 			)}
 		</View>
 	);
-}
+};

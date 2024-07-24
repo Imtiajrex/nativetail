@@ -28,9 +28,10 @@ import {
 	Switch,
 } from "@nativetail/ui";
 import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { TextInput } from "react-native";
 import { Iconify } from "react-native-iconify";
-
+import { z } from "zod";
 export default function Index() {
 	return (
 		<View className="flex-1 bg-background">
@@ -42,6 +43,7 @@ const AllDemo = () => {
 	return (
 		<ScrollView className="gap-2 container" containerClass="flex-1">
 			<Text className="text-foreground">Hellow</Text>
+			<FormDemo />
 			<DropdownContent />
 			<SwitchContent />
 			<FloatingInputContent />
@@ -65,6 +67,93 @@ const AllDemo = () => {
 			</View>
 			<ProgressContent />
 		</ScrollView>
+	);
+};
+const FormDemo = () => {
+	const schema = z.object({
+		name: z.string().min(2).max(10),
+		email: z.string().email(),
+		pin: z.string().length(5),
+		ageGroup: z.enum(["1", "2", "3"]),
+		skills: z.array(z.enum(["1", "2", "3"])),
+		count: z.number(),
+	});
+	type FormSchema = z.infer<typeof schema>;
+	const { control, handleSubmit, reset } = useForm<FormSchema>({
+		defaultValues: {
+			email: "",
+			name: "",
+			pin: "",
+			skills: [],
+			count: 20,
+		},
+	});
+	return (
+		<View className="gap-2 p-4  rounded-2xl border bg-card ">
+			<Text className=" text-xl">Form Demo</Text>
+			<Input control={control} name={"name"} label="Name" />
+			<FloatingInput control={control} name={"email"} label="Email" />
+			<PinInput control={control} name={"pin"} length={5} />
+			<Select
+				control={control}
+				name="ageGroup"
+				options={[
+					{
+						label: "18 - 24",
+						value: "1",
+					},
+					{
+						label: "25 - 30",
+						value: "2",
+					},
+					{
+						label: "30 - 40",
+						value: "3",
+					},
+				]}
+				label="Age Group"
+				placeholder="Select Age Group"
+			/>
+			<MultiSelect
+				control={control}
+				name="skills"
+				options={[
+					{
+						label: "React",
+						value: "1",
+					},
+					{
+						label: "Vue",
+						value: "2",
+					},
+					{
+						label: "Svelte",
+						value: "3",
+					},
+				]}
+				label="Skills"
+				placeholder="Select Skills"
+			/>
+			<Counter control={control} name="count" />
+			<Button
+				className="text-white active:scale-95 scale-100 select-none"
+				onPress={() => {
+					handleSubmit((values) => {
+						showToast({
+							message: JSON.stringify(values),
+						});
+						reset();
+					})();
+				}}
+			>
+				<Text
+					className="text-sm font-medium text-white select-none"
+					selectable={false}
+				>
+					Control
+				</Text>
+			</Button>
+		</View>
 	);
 };
 const DialogDemo = () => {

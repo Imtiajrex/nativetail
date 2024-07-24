@@ -1,4 +1,4 @@
-import { useTw, useTwStore } from "./theme";
+import { useTw } from "./theme";
 export const useTwColor = () => {
 	const tw = useTw();
 	const getTwColor = (color: string) => {
@@ -6,11 +6,6 @@ export const useTwColor = () => {
 	};
 	return { getTwColor };
 };
-export const getTWColor = (color: string) => {
-	const tw = useTwStore.getState().tw!;
-	return tw.style(color).color as string;
-};
-export const getTw = () => useTwStore.getState().tw!;
 
 export const separateClasses = (className: string, isText = false) => {
 	const initialClasses = className.split(" ");

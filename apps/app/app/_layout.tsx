@@ -22,10 +22,7 @@ export default function _layout() {
 		<>
 			<GestureHandlerRootView style={{ flex: 1 }}>
 				<SafeAreaProvider>
-					<ThemeProvider
-						theme={require("../tailwind.config.js")}
-						darkTheme={require("../dark.tailwind.config.js")}
-					>
+					<ThemeProvider theme={require("../tailwind.config.js")}>
 						<ComponentThemeProvider
 							components={{
 								Button: {

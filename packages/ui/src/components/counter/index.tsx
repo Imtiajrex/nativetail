@@ -2,20 +2,50 @@ import { TextInput, View, cn, useTw } from "@nativetail/core";
 import { useCallback, useRef } from "react";
 import { Iconify } from "react-native-iconify";
 import { Button } from "../button";
-export type CounterProps = {
-	value: number;
+import { Control, Controller, Path } from "react-hook-form";
+export type CounterProps<T extends Record<string, any>> = {
+	value?: number;
 	max?: number;
 	min?: number;
-	setValue: React.Dispatch<React.SetStateAction<number>>;
+	setValue?: React.Dispatch<React.SetStateAction<number>>;
 	containerClassName?: string;
+	control?: Control<T, any>;
+	name?: Path<T>;
 };
-export function Counter({
+export const Counter = <T extends Record<string, any>>({
+	name,
+	control,
+	...props
+}: CounterProps<T>) => {
+	if (control) {
+		return (
+			<Controller
+				name={name}
+				control={control}
+				render={({ field }) => {
+					return (
+						<BaseCounter
+							{...props}
+							value={field.value}
+							setValue={(text) => {
+								field.onChange(text);
+							}}
+						/>
+					);
+				}}
+			/>
+		);
+	}
+	return <BaseCounter {...props} />;
+};
+
+function BaseCounter<T extends Record<string, any>>({
 	value,
 	setValue,
 	min,
 	max,
 	containerClassName,
-}: CounterProps) {
+}: CounterProps<T>) {
 	const tw = useTw();
 	const increment = useCallback(() => {
 		setValue((prev) => {

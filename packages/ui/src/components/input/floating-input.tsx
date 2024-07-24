@@ -1,18 +1,51 @@
 import { cn, Text, TextInput, TextInputProps, View } from "@nativetail/core";
-import { useCallback, useState } from "react";
+import { LegacyRef, useCallback, useState } from "react";
 import ShowPassword from "./show-password";
-export type FloatingInputProps = Omit<TextInputProps, "placeholder"> & {
+import { Control, Controller, Path } from "react-hook-form";
+
+export type FloatingInputProps<T = Record<string, any>> = TextInputProps & {
 	containerClassName?: string;
-	label: string;
+	label?: string;
 	error?: string;
 	helperText?: string;
 	isSecretToggleable?: boolean;
 	leftElement?: React.ReactNode;
 	rightElement?: React.ReactNode;
+	value?: string;
+	control?: Control<T, any>;
+	name?: Path<T>;
+	inputRef?: LegacyRef<typeof TextInput>;
 	labelClassName?: string;
 	activeLabelClassName?: string;
 };
-export function FloatingInput({
+
+export const FloatingInput = <T extends Record<string, any>>({
+	name,
+	control,
+	...props
+}: FloatingInputProps<T>) => {
+	if (control) {
+		return (
+			<Controller
+				name={name}
+				control={control}
+				render={({ field }) => {
+					return (
+						<BaseInput
+							{...props}
+							value={field.value}
+							onChangeText={(text) => {
+								field.onChange(text);
+							}}
+						/>
+					);
+				}}
+			/>
+		);
+	}
+	return <BaseInput {...props} />;
+};
+function BaseInput({
 	value,
 	onChangeText,
 	containerClassName,

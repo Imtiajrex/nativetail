@@ -44,7 +44,7 @@ export const useAnimatedStyle = <T extends ViewStyle | TextStyle>({
 		nonAnimatableClasses,
 	} = useMemo(
 		() => separateClasses(mergeClasses(baseClass, className), isText),
-		[className, isText, baseClass, tw, tw.memoBuster]
+		[className, isText, baseClass]
 	);
 	const parse = useCallback(
 		(...classes: string[]) => {
@@ -116,10 +116,10 @@ export function usePlainStyle({ className = "", style, isText }) {
 	const tw = useTw();
 	const { textClasses } = useMemo(
 		() => separateClasses(mergeClasses(baseClass, className), isText),
-		[className, isText, baseClass, tw, tw.memoBuster]
+		[className, isText, baseClass]
 	);
 	const newStyle = useMemo(
-		() => [tw.style(textClasses, className), style ?? {}],
+		() => [tw?.style?.(textClasses, className), style ?? {}],
 		[className, style, tw, tw.memoBuster]
 	);
 	return {

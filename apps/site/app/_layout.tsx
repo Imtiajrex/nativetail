@@ -1,6 +1,6 @@
 import { Slot } from "expo-router";
 import { ScrollView, View } from "@nativetail/core";
-import { ThemeProvider, useTw } from "@nativetail/core/src/tw";
+import { ThemeProvider, useTw } from "@nativetail/core";
 import "react-native-gesture-handler";
 import "react-native-reanimated";
 import "../global.css";

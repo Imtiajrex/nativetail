@@ -1,10 +1,11 @@
 import { cn, Pressable, TextInput, View } from "@nativetail/core";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Control, Controller, Path } from "react-hook-form";
 import { TextInput as NativeTextInput } from "react-native";
 
-export type PinInputProps = {
-	value: string;
-	onChangeText: (text: string) => void;
+export type PinInputProps<T extends Record<string, any>> = {
+	value?: string;
+	onChangeText?: (text: string) => void;
 	length: number;
 	pinBoxClassName?: string;
 	pinBoxFocusedClassName?: string;
@@ -13,8 +14,36 @@ export type PinInputProps = {
 	helperText?: string;
 	secureTextEntry?: boolean;
 	pinHideTime?: number;
+	control?: Control<T, any>;
+	name?: Path<T>;
 };
-export function PinInput({
+export const PinInput = <T extends Record<string, any>>({
+	name,
+	control,
+	...props
+}: PinInputProps<T>) => {
+	if (control) {
+		return (
+			<Controller
+				name={name}
+				control={control}
+				render={({ field }) => {
+					return (
+						<BaseInput
+							{...props}
+							value={field.value}
+							onChangeText={(text) => {
+								field.onChange(text);
+							}}
+						/>
+					);
+				}}
+			/>
+		);
+	}
+	return <BaseInput {...props} />;
+};
+function BaseInput<T extends Record<string, any>>({
 	value,
 	onChangeText,
 	containerClassName,
@@ -26,9 +55,9 @@ export function PinInput({
 	secureTextEntry,
 	pinHideTime = 300,
 	...props
-}: PinInputProps) {
+}: PinInputProps<T>) {
 	const [isFocused, setIsFocused] = useState(false);
-	const activeIndex = value.length == length ? length - 1 : value.length;
+	const activeIndex = value?.length == length ? length - 1 : value?.length;
 	const textInputRef = useRef<NativeTextInput>();
 	const onFocus = useCallback(() => {
 		setIsFocused(true);
@@ -38,7 +67,7 @@ export function PinInput({
 	}, [setIsFocused]);
 	const _handleChange = useCallback(
 		(text: string) => {
-			if (text.length <= length) {
+			if (text?.length <= length) {
 				onChangeText(text);
 			}
 		},

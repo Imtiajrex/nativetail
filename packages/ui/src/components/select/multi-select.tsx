@@ -9,22 +9,51 @@ import {
 import { Dropdown } from "../dropdown";
 import { memo, useCallback, useMemo } from "react";
 import { Iconify } from "react-native-iconify";
+import { Control, Controller, Path } from "react-hook-form";
 
-type SelectProps = PressableProps & {
+type SelectProps<T extends Record<string, any>> = PressableProps & {
 	containerClassName?: string;
-	label: string;
+	label?: string;
 	error?: string;
 	helperText?: string;
-	value: string[];
-	onChange: (value: string[]) => void;
+	value?: string[];
+	onChange?: (value: string[]) => void;
 	placeholder?: string;
 	options: {
 		label: string;
 		value: string;
 		icon?: React.ReactNode;
 	}[];
+	control?: Control<T, any>;
+	name?: Path<T>;
 };
-export function MultiSelect({
+export const MultiSelect = <T extends Record<string, any>>({
+	name,
+	control,
+	...props
+}: SelectProps<T>) => {
+	if (control) {
+		return (
+			<Controller
+				name={name}
+				control={control}
+				render={({ field }) => {
+					return (
+						<BaseSelect
+							{...props}
+							value={field.value}
+							onChange={(text) => {
+								field.onChange(text);
+							}}
+						/>
+					);
+				}}
+			/>
+		);
+	}
+	return <BaseSelect {...props} />;
+};
+function BaseSelect<T extends Record<string, any>>({
 	containerClassName,
 	label,
 	error,
@@ -35,7 +64,7 @@ export function MultiSelect({
 	placeholder,
 	options,
 	...props
-}: SelectProps) {
+}: SelectProps<T>) {
 	const tw = useTw();
 	const renderOptions = useCallback(() => {
 		return options.map((option, index) => (
@@ -72,14 +101,19 @@ export function MultiSelect({
 	);
 }
 const SelectTrigger = memo(
-	({
+	<T extends Record<string, any>>({
 		options,
 		className,
 		value,
 		placeholder,
 		onChange,
 		...props
-	}: Partial<SelectProps>) => {
+	}: PressableProps & {
+		options: SelectProps<T>["options"];
+		value: SelectProps<T>["value"];
+		onChange: SelectProps<T>["onChange"];
+		placeholder: SelectProps<T>["placeholder"];
+	}) => {
 		const selectedOptions = useMemo(
 			() => options.filter((option) => value.includes(option.value)),
 			[value]
@@ -97,7 +131,7 @@ const SelectTrigger = memo(
 					<View className="flex-row gap-2 flex-wrap">
 						{selectedOptions.map((option) => (
 							<Pressable
-								className="bg-muted/15 rounded-2xl text-sm px-2 py-1"
+								className="bg-muted/8 rounded-2xl text-sm px-2 py-1"
 								key={option.value}
 								onPress={() => {
 									onChange(value.filter((val) => val != option.value));

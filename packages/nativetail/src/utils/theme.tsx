@@ -1,10 +1,9 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import {
 	Appearance,
 	useColorScheme as useNativeColorScheme,
 } from "react-native";
-import { create as createStore } from "zustand";
-import { TailwindFn, create } from "../parser";
+import { TailwindFn, TwConfig, create } from "../parser";
 type ColorSchemeType = "light" | "dark";
 
 type ContextType = {
@@ -15,9 +14,6 @@ type ContextType = {
 	setColorScheme: (colorScheme: ColorSchemeType) => void;
 };
 
-export const useTwStore = createStore<{
-	tw: TailwindFn | null;
-}>(() => ({ tw: null }));
 export const ThemeContext = createContext<ContextType>({
 	tw: null,
 	theme: null,
@@ -29,35 +25,34 @@ export const ThemeContext = createContext<ContextType>({
 export const ThemeProvider = ({
 	children,
 	theme,
-	darkTheme,
 	defaultColorScheme,
 }: {
 	children: any;
-	theme: any;
-	darkTheme?: any;
+	theme: TwConfig;
 	defaultColorScheme?: ColorSchemeType;
 }) => {
 	const [colorScheme, setColorScheme] = useState<ColorSchemeType>(
 		defaultColorScheme || useNativeColorScheme()
 	);
-	const tw = useTwStore((s) => s.tw);
-	useEffect(() => {
-		if (colorScheme === "dark" && darkTheme) return setTheme(darkTheme);
-		if (theme) setTheme(theme);
-	}, [theme, darkTheme, colorScheme]);
-	const setTheme = (theme: any) => {
-		useTwStore.setState({ tw: create(theme) });
-	};
+
+	const tw = useRef(create(theme));
 	useEffect(() => {
 		if ("setColorScheme" in Appearance) {
 			Appearance.setColorScheme(colorScheme);
 		}
-		if (colorScheme === "dark" && darkTheme) setTheme(darkTheme);
-		else if (theme) setTheme(theme);
 	}, [colorScheme]);
 	return (
 		<ThemeContext.Provider
-			value={{ tw, theme, setTheme, colorScheme, setColorScheme }}
+			value={{
+				tw: tw.current,
+				theme,
+				setTheme: (theme) => {
+					// setTw(create(theme));
+					tw.current = create(theme);
+				},
+				colorScheme,
+				setColorScheme,
+			}}
 		>
 			{tw && children}
 		</ThemeContext.Provider>

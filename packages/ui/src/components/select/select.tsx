@@ -2,22 +2,51 @@ import { cn, PressableProps, Text, useTw, View } from "@nativetail/core";
 import { Dropdown } from "../dropdown";
 import { memo, useCallback, useMemo } from "react";
 import { Iconify } from "react-native-iconify";
+import { Control, Controller, Path } from "react-hook-form";
 
-type SelectProps = PressableProps & {
+type SelectProps<T extends Record<string, any>> = PressableProps & {
 	containerClassName?: string;
-	label: string;
+	label?: string;
 	error?: string;
 	helperText?: string;
-	value: string;
-	onChange: (value: string) => void;
+	value?: string;
+	onChange?: (value: string) => void;
 	placeholder?: string;
 	options: {
 		label: string;
 		value: string;
 		icon?: React.ReactNode;
 	}[];
+	control?: Control<T, any>;
+	name?: Path<T>;
 };
-export function Select({
+export const Select = <T extends Record<string, any>>({
+	name,
+	control,
+	...props
+}: SelectProps<T>) => {
+	if (control) {
+		return (
+			<Controller
+				name={name}
+				control={control}
+				render={({ field }) => {
+					return (
+						<BaseSelect
+							{...props}
+							value={field.value}
+							onChange={(text) => {
+								field.onChange(text);
+							}}
+						/>
+					);
+				}}
+			/>
+		);
+	}
+	return <BaseSelect {...props} />;
+};
+function BaseSelect<T extends Record<string, any>>({
 	containerClassName,
 	label,
 	error,
@@ -28,7 +57,7 @@ export function Select({
 	placeholder,
 	options,
 	...props
-}: SelectProps) {
+}: SelectProps<T>) {
 	const tw = useTw();
 	const renderOptions = useCallback(() => {
 		return options.map((option, index) => (
@@ -61,13 +90,17 @@ export function Select({
 	);
 }
 const SelectTrigger = memo(
-	({
+	<T extends Record<string, any>>({
 		options,
 		className,
 		value,
 		placeholder,
 		...props
-	}: Partial<SelectProps>) => {
+	}: PressableProps & {
+		options: SelectProps<T>["options"];
+		value: SelectProps<T>["value"];
+		placeholder: SelectProps<T>["placeholder"];
+	}) => {
 		const selectedOption = useMemo(
 			() => options.find((option) => option.value === value),
 			[value]

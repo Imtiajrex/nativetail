@@ -13,3 +13,4 @@ export * from "./blur";
 export * from "./progress";
 export * from "./counter";
 export * from "./tabs";
+export * from "./form-builder";

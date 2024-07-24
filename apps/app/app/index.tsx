@@ -134,7 +134,6 @@ const FormDemo = () => {
 				label="Skills"
 				placeholder="Select Skills"
 			/>
-			<Counter control={control} name="count" />
 			<Button
 				className="text-white active:scale-95 scale-100 select-none"
 				onPress={() => {

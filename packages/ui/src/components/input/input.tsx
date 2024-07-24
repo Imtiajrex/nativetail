@@ -73,14 +73,14 @@ const BaseInput = <T extends Record<string, any>>({
 	);
 	return (
 		<View className={cn("w-full gap-1", containerClassName)}>
-			<Text className={cn("text-muted/75 duration-75 ")}>{label}</Text>
+			<Text className={cn("text-muted/75 duration-75 text-sm")}>{label}</Text>
 
 			<TextInput
 				value={value}
 				onChangeText={onChangeText}
 				ref={inputRef}
 				className={cn(
-					"p-3 bg-card rounded-lg w-full border border-muted/15 h-14 text-foreground -z-5 text-[16px]",
+					"p-3 bg-card rounded-lg w-full border border-muted/15 h-12 text-foreground -z-5 text-[16px]",
 					className,
 					isSecretToggleable || rightElement ? "pr-12" : "",
 					leftElement ? "pl-12" : ""

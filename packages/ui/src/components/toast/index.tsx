@@ -1,17 +1,22 @@
-import { BlurView } from "expo-blur";
 import { cn, Pressable, Text, useTw, View } from "@nativetail/core";
-import { useEffect } from "react";
-import { create } from "zustand";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AnimatePresence } from "moti";
-import { Blur } from "../blur";
+import { useEffect, useState } from "react";
 import { Iconify } from "react-native-iconify";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { create } from "zustand";
 type ToastType = {
 	message: string;
 	content?: string;
 	id: string;
 	timeout?: number;
-	position?: "top" | "bottom";
+	position?:
+		| "top-center"
+		| "top-left"
+		| "top-right"
+		| "bottom-left"
+		| "bottom-right"
+		| "bottom-center";
+
 	containerClassName?: string;
 	type?: "success" | "danger" | "info" | "warning";
 };
@@ -29,7 +34,7 @@ const useToastState = create<ToastStore>((set) => ({
 				...state.toasts,
 				{
 					type: "info",
-					position: "top",
+					position: "top-center",
 					...toast,
 				},
 			],
@@ -42,16 +47,44 @@ const useToastState = create<ToastStore>((set) => ({
 let timeouts = new Map<string, NodeJS.Timeout>();
 export const showToast = (toast: InsertToastType) => {
 	const id = Math.random().toString(36).substring(7);
+	console.log(id);
 	useToastState.getState().addToast({ ...toast, id });
 	return id;
 };
 export function Toaster() {
 	const toasts = useToastState((state) => state.toasts);
+	const topToasts = toasts.filter((toast) => toast.position.includes("top"));
+	const bottomToasts = toasts.filter((toast) =>
+		toast.position.includes("bottom")
+	);
+
+	const safeInsets = useSafeAreaInsets();
 	return (
-		<AnimatePresence exitBeforeEnter>
-			{toasts.map((toast, index) => (
-				<Toast key={toast.id} index={index} {...toast} />
-			))}
+		<AnimatePresence exitBeforeEnter presenceAffectsLayout>
+			{topToasts.length > 0 && (
+				<View
+					className={cn(
+						"absolute w-full top-0 left-0  justify-center z-50 gap-2",
+						`top-[${safeInsets.top + 10}px]`
+					)}
+				>
+					{topToasts.map((toast, index) => (
+						<Toast index={index} {...toast} key={toast.id} />
+					))}
+				</View>
+			)}
+			{bottomToasts.length > 0 && (
+				<View
+					className={cn(
+						"absolute w-full left-0  justify-center z-50 gap-2",
+						`bottom-[${safeInsets.bottom + 10}px]`
+					)}
+				>
+					{bottomToasts.map((toast, index) => (
+						<Toast key={toast.id} index={index} {...toast} />
+					))}
+				</View>
+			)}
 		</AnimatePresence>
 	);
 }
@@ -61,63 +94,90 @@ const Toast = (
 		index: number;
 	}
 ) => {
+	const [open, setOpen] = useState(true);
 	const tw = useTw();
+	const closeToast = () => {
+		setOpen(false);
+		setTimeout(() => useToastState.getState().removeToast(toast.id), 150);
+	};
 	useEffect(() => {
-		const id = setTimeout(() => {
-			useToastState.getState().removeToast(toast.id);
-		}, toast.timeout || 5000);
+		const id = setTimeout(closeToast, toast.timeout || 5000);
 		timeouts.set(toast.id, id);
 		return () => {
 			clearTimeout(timeouts.get(toast.id)!);
 			timeouts.delete(toast.id);
 		};
 	}, [toast.id]);
-	const safeInsets = useSafeAreaInsets();
+
+	const Icons = {
+		success: (
+			<Iconify
+				icon="lets-icons:check-fill"
+				size={20}
+				color={tw.color("success")}
+			/>
+		),
+		danger: (
+			<Iconify icon="uis:times-circle" size={20} color={tw.color("danger")} />
+		),
+		info: (
+			<Iconify
+				icon="fluent:info-16-filled"
+				size={20}
+				color={tw.color("info")}
+			/>
+		),
+		warning: (
+			<Iconify
+				icon="fluent:warning-16-filled"
+				size={20}
+				color={tw.color("warning")}
+			/>
+		),
+	};
+
+	const Icon = Icons[toast.type];
+	const horizontalPositions = {
+		center: "items-center",
+		left: "items-start",
+		right: "items-end",
+	};
+	const horizontalPosition =
+		horizontalPositions[
+			toast.position.replace("top-", "").replace("bottom-", "")
+		];
 	return (
 		<View
-			className={cn(
-				"absolute w-full top-0 left-0 items-center justify-center z-50 ",
-				toast.position === "top"
-					? `top-[${safeInsets.top + 10}px]`
-					: `bottom-[${safeInsets.bottom + 10}px]`,
-				toast.containerClassName
-			)}
+			className={cn("w-full", horizontalPosition, toast.containerClassName)}
 			animated
 		>
 			<Pressable
 				onPress={() => {
-					useToastState.getState().removeToast(toast.id);
+					if (open) closeToast();
 				}}
 				className="w-full items-center justify-center active:scale-95 scale-100  px-4"
 			>
-				<View
-					className={cn(
-						`bg-card/95 border border-muted/15 px-6 py-2 in:opacity-0 opacity-100 in:-translate-y-16  out:-translate-y-16 out:opacity-0 in:scale-0 scale-100 out:scale-0 rounded-full overflow-hidden max-w-xs w-full `,
-						`translate-y-0`
+				<AnimatePresence presenceAffectsLayout exitBeforeEnter>
+					{open && (
+						<View
+							className={cn(
+								`bg-card/95 border border-muted/15 px-2 py-2  rounded-2xl overflow-hidden flex-row items-center gap-2 in:-translate-y-24  translate-y-0 out:-translate-y-24 in:scale-0 scale-100 out:scale-0`
+							)}
+							animated
+						>
+							<View className="in:scale-0 scale-100">{Icon}</View>
+							<View className="">
+								<Text className="font-medium text-sm text-foreground">
+									{toast.message}
+								</Text>
+								{toast.content && (
+									<Text className="text-xs text-muted">{toast.content}</Text>
+								)}
+							</View>
+						</View>
 					)}
-					animated
-				>
-					<Blur
-						style={tw`absolute top-0 left-0 rounded-xl flex-1 bg-card/50 rounded-full`}
-					/>
-					{/* <Icon /> */}
-					<View>
-						<Text className="font-medium text-sm text-foreground">
-							{toast.message}
-						</Text>
-						{toast.content && (
-							<Text className="text-xs text-muted">{toast.content}</Text>
-						)}
-					</View>
-				</View>
+				</AnimatePresence>
 			</Pressable>
 		</View>
 	);
-};
-
-const Icons = {
-	success: <Iconify icon="mdi:check" size={20} />,
-	danger: <Iconify icon="tabler:x" size={20} />,
-	icon: <Iconify icon="mdi:info" size={20} />,
-	warning: <Iconify icon="mdi:warning" size={20} />,
 };

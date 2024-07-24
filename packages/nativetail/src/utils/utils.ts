@@ -2,11 +2,8 @@ import { type ClassValue, clsx } from "clsx";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
-import {
-	cva,
-	type VariantProps,
-	type ConfigVariants,
-} from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
+import { StringToBoolean } from "class-variance-authority/dist/types";
 
 export function mergeClasses(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -20,4 +17,9 @@ export const useForceUpdate = (renderOptions: any[]) => {
 	React.useEffect(forceUpdate, renderOptions);
 };
 
-export { mergeClasses as cn, cva, type VariantProps, type ConfigVariants };
+type ConfigSchema = Record<string, Record<string, ClassValue>>;
+type ConfigVariants<T extends ConfigSchema> = {
+	[Variant in keyof T]?: StringToBoolean<keyof T[Variant]> | null | undefined;
+};
+
+export { mergeClasses as cn, cva, type ConfigVariants, type VariantProps };

@@ -35,7 +35,7 @@ export const Input = <T extends Record<string, any>>({
 			<Controller
 				name={name}
 				control={control}
-				render={({ field }) => {
+				render={({ field, fieldState }) => {
 					return (
 						<BaseInput
 							{...props}
@@ -43,6 +43,7 @@ export const Input = <T extends Record<string, any>>({
 							onChangeText={(text) => {
 								field.onChange(text);
 							}}
+							error={fieldState.error?.message}
 						/>
 					);
 				}}
@@ -83,7 +84,8 @@ const BaseInput = <T extends Record<string, any>>({
 					"p-3 bg-card rounded-lg w-full border border-muted/15 h-12 text-foreground -z-5 text-[16px]",
 					className,
 					isSecretToggleable || rightElement ? "pr-12" : "",
-					leftElement ? "pl-12" : ""
+					leftElement ? "pl-12" : "",
+					error && "border-danger"
 				)}
 				placeholderTextColor={tw.color("muted")}
 				secureTextEntry={!showPassword}

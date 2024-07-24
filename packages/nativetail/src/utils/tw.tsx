@@ -1,10 +1,10 @@
 import { useTw } from "./theme";
 export const useTwColor = () => {
 	const tw = useTw();
-	const getTwColor = (color: string) => {
+	const getColor = (color: string) => {
 		return tw.style(color).color as string;
 	};
-	return { getTwColor };
+	return { getColor };
 };
 
 export const separateClasses = (className: string, isText = false) => {

@@ -30,7 +30,7 @@ export const Select = <T extends Record<string, any>>({
 			<Controller
 				name={name}
 				control={control}
-				render={({ field }) => {
+				render={({ field, fieldState }) => {
 					return (
 						<BaseSelect
 							{...props}
@@ -38,6 +38,7 @@ export const Select = <T extends Record<string, any>>({
 							onChange={(text) => {
 								field.onChange(text);
 							}}
+							error={fieldState.error?.message}
 						/>
 					);
 				}}
@@ -82,6 +83,7 @@ function BaseSelect<T extends Record<string, any>>({
 					options={options}
 					value={value}
 					placeholder={placeholder}
+					error={error}
 					{...props}
 				/>
 				<Dropdown.Menu>{renderOptions()}</Dropdown.Menu>
@@ -95,11 +97,13 @@ const SelectTrigger = memo(
 		className,
 		value,
 		placeholder,
+		error,
 		...props
 	}: PressableProps & {
 		options: SelectProps<T>["options"];
 		value: SelectProps<T>["value"];
 		placeholder: SelectProps<T>["placeholder"];
+		error: SelectProps<T>["error"];
 	}) => {
 		const selectedOption = useMemo(
 			() => options.find((option) => option.value === value),
@@ -107,25 +111,28 @@ const SelectTrigger = memo(
 		);
 		const tw = useTw();
 		return (
-			<Dropdown.Trigger
-				className={cn(
-					"p-3 bg-card rounded-lg w-full border flex-row items-center justify-between border-muted/15 h-14 text-foreground -z-5 text-[16px]",
-					className
-				)}
-				{...props}
-			>
-				{selectedOption && (
-					<Text className="text-foreground">{selectedOption.label}</Text>
-				)}
-				{!selectedOption && placeholder && (
-					<Text className="text-muted">{placeholder}</Text>
-				)}
-				<Iconify
-					icon="solar:alt-arrow-down-outline"
-					size={20}
-					color={tw.color("foreground")}
-				/>
-			</Dropdown.Trigger>
+			<>
+				<Dropdown.Trigger
+					className={cn(
+						"p-3 bg-card rounded-lg w-full border flex-row items-center justify-between border-muted/15 h-14 text-foreground -z-5 text-[16px]",
+						className
+					)}
+					{...props}
+				>
+					{selectedOption && (
+						<Text className="text-foreground">{selectedOption.label}</Text>
+					)}
+					{!selectedOption && placeholder && (
+						<Text className="text-muted">{placeholder}</Text>
+					)}
+					<Iconify
+						icon="solar:alt-arrow-down-outline"
+						size={20}
+						color={tw.color("foreground")}
+					/>
+				</Dropdown.Trigger>
+				{error && <Text className="text-sm text-danger">{error}</Text>}
+			</>
 		);
 	}
 );

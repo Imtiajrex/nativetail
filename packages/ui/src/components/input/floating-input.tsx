@@ -29,7 +29,7 @@ export const FloatingInput = <T extends Record<string, any>>({
 			<Controller
 				name={name}
 				control={control}
-				render={({ field }) => {
+				render={({ field, fieldState }) => {
 					return (
 						<BaseInput
 							{...props}
@@ -37,6 +37,7 @@ export const FloatingInput = <T extends Record<string, any>>({
 							onChangeText={(text) => {
 								field.onChange(text);
 							}}
+							error={fieldState?.error?.message}
 						/>
 					);
 				}}

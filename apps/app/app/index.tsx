@@ -32,6 +32,8 @@ import { useForm } from "react-hook-form";
 import { TextInput } from "react-native";
 import { Iconify } from "react-native-iconify";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 export default function Index() {
 	return (
 		<View className="flex-1 bg-background">
@@ -69,6 +71,10 @@ const AllDemo = () => {
 		</ScrollView>
 	);
 };
+const sleep = async (sleepMs: number) =>
+	new Promise((resolve) => {
+		setTimeout(() => resolve(true), sleepMs);
+	});
 const FormDemo = () => {
 	const schema = z.object({
 		name: z.string().min(2).max(10),
@@ -76,20 +82,38 @@ const FormDemo = () => {
 		pin: z.string().length(5),
 		ageGroup: z.enum(["1", "2", "3"]),
 		skills: z.array(z.enum(["1", "2", "3"])),
-		count: z.number(),
 	});
 	type FormSchema = z.infer<typeof schema>;
 	const { control, handleSubmit, reset } = useForm<FormSchema>({
+		resolver: zodResolver(schema),
+		reValidateMode: "onChange",
 		defaultValues: {
-			email: "",
 			name: "",
+			email: "",
 			pin: "",
-			skills: [],
-			count: 20,
+		},
+	});
+	const submit = useMutation({
+		mutationFn: async (values: FormSchema) => {
+			await sleep(1500);
+		},
+		onSuccess: () => {
+			showToast({
+				message: "Form submitted!",
+				content: "Form has been submitted successfully!",
+				type: "success",
+			});
+		},
+		onError: () => {
+			showToast({
+				message: "Failed!",
+				content: "Failed to submit form!",
+				type: "danger",
+			});
 		},
 	});
 	return (
-		<View className="gap-2 p-4  rounded-2xl border bg-card ">
+		<View className="gap-2 p-4  rounded-2xl border bg-card border-muted/15 ">
 			<Text className=" text-xl">Form Demo</Text>
 			<Input control={control} name={"name"} label="Name" />
 			<FloatingInput control={control} name={"email"} label="Email" />
@@ -137,13 +161,14 @@ const FormDemo = () => {
 			<Button
 				className="text-white active:scale-95 scale-100 select-none"
 				onPress={() => {
-					handleSubmit((values) => {
-						showToast({
-							message: JSON.stringify(values),
-						});
-						reset();
-					})();
+					handleSubmit(
+						(values) => {
+							submit.mutate(values);
+						},
+						(errors) => console.log(errors)
+					)();
 				}}
+				isLoading={submit.isPending}
 			>
 				<Text
 					className="text-sm font-medium text-white select-none"
@@ -190,12 +215,13 @@ const ProgressContent = () => {
 	);
 };
 const SwitchContent = () => {
-	const { colorScheme, setColorScheme } = useThemeContext();
+	const { colorScheme, setColorScheme, setTheme } = useThemeContext();
 	return (
 		<Switch
 			checked={colorScheme === "dark"}
 			onChange={(value) => {
 				setColorScheme(value ? "dark" : "light");
+				setTheme(require("../dark.tailwind.config"));
 			}}
 		/>
 	);
@@ -269,13 +295,25 @@ const DropdownContent = () => {
 						showToast({
 							message: "Item 1",
 							content: "Item 1 has been clicked",
-							position: "top",
+							position: "top-left",
+							type: "danger",
 						});
 					}}
 				>
 					Item 1
 				</Dropdown.Item>
-				<Dropdown.Item>Item 2</Dropdown.Item>
+				<Dropdown.Item
+					onPress={() => {
+						showToast({
+							message: "Item 2",
+							content: "Item 2 has been clicked",
+							position: "top-left",
+							type: "warning",
+						});
+					}}
+				>
+					Item 2
+				</Dropdown.Item>
 				<Dropdown.Item>Item 3</Dropdown.Item>
 			</Dropdown.Menu>
 		</Dropdown.Root>
@@ -356,7 +394,8 @@ const AlertDialogContent = () => {
 					showToast({
 						message: "Deleted Successfully",
 						content: "The item has been deleted successfully",
-						position: "top",
+						position: "top-right",
+						type: "success",
 					});
 				}}
 				title="Are you sure you want to delete this item?"
@@ -436,7 +475,8 @@ const ActionSheetContent = () => {
 							showToast({
 								message: "Deleted Successfully",
 								content: "The item has been deleted successfully",
-								position: "top",
+								position: "bottom-center",
+								type: "success",
 							});
 						},
 						text: "Delete This Item",

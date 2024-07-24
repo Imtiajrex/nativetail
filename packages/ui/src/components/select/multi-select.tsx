@@ -37,7 +37,7 @@ export const MultiSelect = <T extends Record<string, any>>({
 			<Controller
 				name={name}
 				control={control}
-				render={({ field }) => {
+				render={({ field, fieldState }) => {
 					return (
 						<BaseSelect
 							{...props}
@@ -45,6 +45,7 @@ export const MultiSelect = <T extends Record<string, any>>({
 							onChange={(text) => {
 								field.onChange(text);
 							}}
+							error={fieldState.error?.message}
 						/>
 					);
 				}}
@@ -74,9 +75,9 @@ function BaseSelect<T extends Record<string, any>>({
 				icon={option.icon}
 				onChange={(val) => {
 					if (!val) onChange(value.filter((v) => v != option.value));
-					else onChange([...value, val]);
+					else onChange([...(value || []), val]);
 				}}
-				isActive={value.includes(option.value)}
+				isActive={value?.includes?.(option.value)}
 				key={option.value}
 				first={index === 0}
 				last={index === options.length - 1}
@@ -93,6 +94,7 @@ function BaseSelect<T extends Record<string, any>>({
 					value={value}
 					placeholder={placeholder}
 					onChange={onChange}
+					error={error}
 					{...props}
 				/>
 				<Dropdown.Menu>{renderOptions()}</Dropdown.Menu>
@@ -107,50 +109,56 @@ const SelectTrigger = memo(
 		value,
 		placeholder,
 		onChange,
+		error,
 		...props
 	}: PressableProps & {
 		options: SelectProps<T>["options"];
 		value: SelectProps<T>["value"];
 		onChange: SelectProps<T>["onChange"];
 		placeholder: SelectProps<T>["placeholder"];
+		error: SelectProps<T>["error"];
 	}) => {
 		const selectedOptions = useMemo(
-			() => options.filter((option) => value.includes(option.value)),
+			() => options.filter((option) => value?.includes?.(option.value)),
 			[value]
 		);
 		const tw = useTw();
 		return (
-			<Dropdown.Trigger
-				className={cn(
-					"p-3 bg-card rounded-lg w-full border flex-row items-center justify-between border-muted/15 h-14 text-foreground -z-5 text-[16px]",
-					className
-				)}
-				{...props}
-			>
-				{selectedOptions.length > 0 && (
-					<View className="flex-row gap-2 flex-wrap">
-						{selectedOptions.map((option) => (
-							<Pressable
-								className="bg-muted/8 rounded-2xl text-sm px-2 py-1"
-								key={option.value}
-								onPress={() => {
-									onChange(value.filter((val) => val != option.value));
-								}}
-							>
-								{option.label}
-							</Pressable>
-						))}
-					</View>
-				)}
-				{selectedOptions.length == 0 && placeholder && (
-					<Text className="text-muted">{placeholder}</Text>
-				)}
-				<Iconify
-					icon="solar:alt-arrow-down-outline"
-					size={20}
-					color={tw.color("foreground")}
-				/>
-			</Dropdown.Trigger>
+			<>
+				<Dropdown.Trigger
+					className={cn(
+						"p-3 bg-card rounded-lg w-full border flex-row items-center justify-between border-muted/15 h-14 text-foreground -z-5 text-[16px]",
+						className
+					)}
+					{...props}
+				>
+					{selectedOptions.length > 0 && (
+						<View className="flex-row gap-2 flex-wrap">
+							{selectedOptions.map((option) => (
+								<Pressable
+									className="bg-muted/8 rounded-2xl text-sm px-2 py-1"
+									key={option.value}
+									onPress={() => {
+										onChange(value.filter((val) => val != option.value));
+									}}
+								>
+									{option.label}
+								</Pressable>
+							))}
+						</View>
+					)}
+					{selectedOptions.length == 0 && placeholder && (
+						<Text className="text-muted">{placeholder}</Text>
+					)}
+					<Iconify
+						icon="solar:alt-arrow-down-outline"
+						size={20}
+						color={tw.color("foreground")}
+					/>
+				</Dropdown.Trigger>
+
+				{error && <Text className="text-sm text-danger">{error}</Text>}
+			</>
 		);
 	}
 );

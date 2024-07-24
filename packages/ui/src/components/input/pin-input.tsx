@@ -1,9 +1,9 @@
-import { cn, Pressable, TextInput, View } from "@nativetail/core";
+import { cn, Pressable, Text, TextInput, View } from "@nativetail/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Control, Controller, Path } from "react-hook-form";
 import { TextInput as NativeTextInput } from "react-native";
 
-export type PinInputProps<T extends Record<string, any>> = {
+export type PinInputProps<T = Record<string, any>> = {
 	value?: string;
 	onChangeText?: (text: string) => void;
 	length: number;
@@ -27,7 +27,7 @@ export const PinInput = <T extends Record<string, any>>({
 			<Controller
 				name={name}
 				control={control}
-				render={({ field }) => {
+				render={({ field, fieldState }) => {
 					return (
 						<BaseInput
 							{...props}
@@ -35,6 +35,7 @@ export const PinInput = <T extends Record<string, any>>({
 							onChangeText={(text) => {
 								field.onChange(text);
 							}}
+							error={fieldState.error?.message}
 						/>
 					);
 				}}
@@ -78,31 +79,34 @@ function BaseInput<T extends Record<string, any>>({
 		textInputRef.current?.focus();
 	}, [textInputRef, setIsFocused]);
 	return (
-		<View className={cn(" gap-2 flex-row  w-full", containerClassName)}>
-			{Array.from({ length: length }).map((_, index) => (
-				<PinBox
-					key={`pininput-${index}`}
-					pinBoxClassName={pinBoxClassName}
-					isFocused={isFocused}
-					activeIndex={activeIndex}
-					index={index}
-					pinBoxFocusedClassName={pinBoxFocusedClassName}
-					onPinBoxPress={onPinBoxPress}
-					secureTextEntry={secureTextEntry}
+		<>
+			<View className={cn(" gap-2 flex-row  w-full", containerClassName)}>
+				{Array.from({ length: length }).map((_, index) => (
+					<PinBox
+						key={`pininput-${index}`}
+						pinBoxClassName={pinBoxClassName}
+						isFocused={isFocused}
+						activeIndex={activeIndex}
+						index={index}
+						pinBoxFocusedClassName={pinBoxFocusedClassName}
+						onPinBoxPress={onPinBoxPress}
+						secureTextEntry={secureTextEntry}
+						value={value}
+						pinHideTime={pinHideTime}
+					/>
+				))}
+				<TextInput
+					ref={textInputRef}
 					value={value}
-					pinHideTime={pinHideTime}
+					onChangeText={_handleChange}
+					onFocus={onFocus}
+					onBlur={onBlur}
+					className="opacity-0 scale-0 absolute"
+					{...props}
 				/>
-			))}
-			<TextInput
-				ref={textInputRef}
-				value={value}
-				onChangeText={_handleChange}
-				onFocus={onFocus}
-				onBlur={onBlur}
-				className="opacity-0 scale-0 absolute"
-				{...props}
-			/>
-		</View>
+			</View>
+			{error && <Text className="text-sm text-danger">{error}</Text>}
+		</>
 	);
 }
 
@@ -127,7 +131,7 @@ const PinBox = ({
 	secureTextEntry?: boolean;
 	pinHideTime?: number;
 }) => {
-	const pinValue = value[index];
+	const pinValue = value?.[index];
 	const isActive = activeIndex === index;
 	const [hide, setHide] = useState(false);
 	const timeoutRef = useRef<NodeJS.Timeout>(null);
@@ -154,6 +158,7 @@ const PinBox = ({
 					"border-foreground" + " " + pinBoxFocusedClassName
 			)}
 			onPress={onPinBoxPress}
+			onFocus={onPinBoxPress}
 		>
 			{hide ? (
 				<View className="w-2 h-2 rounded-full bg-foreground" />

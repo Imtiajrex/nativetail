@@ -1,7 +1,7 @@
 import React from "react";
 import { ActivityIndicator as NativeActivityIndicator } from "react-native";
 import { useTw } from "../utils/theme";
-import { getTWColor } from "../utils/tw";
+import { useTwColor } from "../utils/tw";
 
 type ActivityIndicatorProps = React.ComponentProps<
 	typeof NativeActivityIndicator
@@ -10,7 +10,8 @@ type ActivityIndicatorProps = React.ComponentProps<
 };
 export const ActivityIndicator = (props: ActivityIndicatorProps) => {
 	const tw = useTw();
-	const color = getTWColor(props.className || "text-foreground");
+	const { getColor } = useTwColor();
+	const color = getColor(props.className || "text-foreground");
 	return (
 		<NativeActivityIndicator
 			{...props}

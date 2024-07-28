@@ -19,8 +19,10 @@ import {
 	DialogMethods,
 	Dropdown,
 	FloatingInput,
+	FormBuilder,
 	Input,
 	MultiSelect,
+	PhoneInput,
 	PinInput,
 	Progress,
 	Select,
@@ -45,6 +47,7 @@ const AllDemo = () => {
 	return (
 		<ScrollView className="gap-2 container" containerClass="flex-1">
 			<Text className="text-foreground">Hellow</Text>
+			<FormBuilderDemo />
 			<FormDemo />
 			<DropdownContent />
 			<SwitchContent />
@@ -75,6 +78,116 @@ const sleep = async (sleepMs: number) =>
 	new Promise((resolve) => {
 		setTimeout(() => resolve(true), sleepMs);
 	});
+
+const FormBuilderDemo = () => {
+	const schema = z.object({
+		name: z.string().min(2).max(10),
+		email: z.string().email(),
+		pin: z.string().length(5),
+		ageGroup: z.enum(["1", "2", "3"]),
+		skills: z.array(z.enum(["1", "2", "3"])),
+		phone: z.string().length(10).optional(),
+	});
+	type FormSchema = z.infer<typeof schema>;
+	const submit = useMutation({
+		mutationFn: async (values: FormSchema) => {
+			await sleep(1500);
+		},
+		onSuccess: () => {
+			showToast({
+				message: "Form submitted!",
+				content: "Form has been submitted successfully!",
+				type: "success",
+			});
+		},
+		onError: () => {
+			showToast({
+				message: "Failed!",
+				content: "Failed to submit form!",
+				type: "danger",
+			});
+		},
+	});
+	return (
+		<View className="gap-2 p-4  rounded-2xl border bg-card border-muted/15 ">
+			<Text className=" text-xl">Form Builder Demo</Text>
+			<FormBuilder
+				schema={schema}
+				inputs={{
+					name: {
+						type: "text",
+						props: {
+							label: "Name",
+						},
+					},
+					email: {
+						type: "text",
+						props: {
+							label: "Email",
+						},
+					},
+					ageGroup: {
+						type: "select",
+						props: {
+							label: "Age Group",
+							placeholder: "Select Age Group",
+							options: [
+								{
+									label: "18 - 24",
+									value: "1",
+								},
+								{
+									label: "25 - 30",
+									value: "2",
+								},
+							],
+						},
+					},
+					pin: {
+						type: "pin",
+						props: {
+							length: 5,
+						},
+					},
+					phone: {
+						type: "phone",
+						props: {},
+					},
+					skills: {
+						type: "multi-select",
+						props: {
+							label: "Skills",
+							placeholder: "Select Skills",
+							options: [
+								{
+									label: "React",
+									value: "1",
+								},
+								{
+									label: "Vue",
+									value: "2",
+								},
+							],
+						},
+					},
+				}}
+				onSubmit={submit.mutate}
+				onError={(errors) => {
+					console.log(errors);
+					showToast({
+						message: "Some error occured!",
+						type: "danger",
+						modal: true,
+					});
+				}}
+				isSubmitting={submit.isPending}
+				defaultValues={{
+					pin: "",
+				}}
+			/>
+		</View>
+	);
+};
 const FormDemo = () => {
 	const schema = z.object({
 		name: z.string().min(2).max(10),
@@ -82,6 +195,7 @@ const FormDemo = () => {
 		pin: z.string().length(5),
 		ageGroup: z.enum(["1", "2", "3"]),
 		skills: z.array(z.enum(["1", "2", "3"])),
+		phone: z.string().length(10).optional(),
 	});
 	type FormSchema = z.infer<typeof schema>;
 	const { control, handleSubmit, reset } = useForm<FormSchema>({
@@ -91,6 +205,8 @@ const FormDemo = () => {
 			name: "",
 			email: "",
 			pin: "",
+			skills: [],
+			phone: "",
 		},
 	});
 	const submit = useMutation({
@@ -118,6 +234,7 @@ const FormDemo = () => {
 			<Input control={control} name={"name"} label="Name" />
 			<FloatingInput control={control} name={"email"} label="Email" />
 			<PinInput control={control} name={"pin"} length={5} />
+			<PhoneInput control={control} name={"phone"} />
 			<Select
 				control={control}
 				name="ageGroup"

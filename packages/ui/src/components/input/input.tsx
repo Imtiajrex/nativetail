@@ -1,12 +1,14 @@
 import {
 	cn,
+	Pressable,
 	Text,
 	TextInput,
 	TextInputProps,
 	useTw,
 	View,
 } from "@nativetail/core";
-import React, { LegacyRef, useState } from "react";
+import { MotiView } from "moti";
+import React, { createRef, useState } from "react";
 import { Control, Controller, Path } from "react-hook-form";
 import { TextInput as NativeTextInput } from "react-native";
 import ShowPassword from "./show-password";
@@ -22,7 +24,9 @@ export type InputProps<T = Record<string, any>> = TextInputProps & {
 	value?: string;
 	control?: Control<T, any>;
 	name?: Path<T>;
-	inputRef?: LegacyRef<NativeTextInput>;
+	inputRef?: React.RefObject<NativeTextInput>;
+	inputContainerClassName?: string;
+	formatter?: (value: string) => string;
 };
 
 export const Input = <T extends Record<string, any>>({
@@ -64,7 +68,9 @@ const BaseInput = <T extends Record<string, any>>({
 	rightElement,
 	helperText,
 	leftElement,
-	inputRef,
+	inputRef = createRef<NativeTextInput>(),
+	inputContainerClassName,
+	formatter,
 	...props
 }: InputProps<T>) => {
 	const tw = useTw();
@@ -72,34 +78,65 @@ const BaseInput = <T extends Record<string, any>>({
 	const [showPassword, setShowPassword] = useState(
 		isSecretToggleable ? false : true
 	);
+	const [isFocused, setIsFocused] = useState(false);
 	return (
 		<View className={cn("w-full gap-1", containerClassName)}>
 			<Text className={cn("text-muted/75 duration-75 text-sm")}>{label}</Text>
 
-			<TextInput
-				value={value}
-				onChangeText={onChangeText}
-				ref={inputRef}
+			<View
 				className={cn(
-					"p-3 bg-card rounded-lg w-full border border-muted/15 h-12 text-foreground -z-5 text-[16px]",
-					className,
-					isSecretToggleable || rightElement ? "pr-12" : "",
-					leftElement ? "pl-12" : "",
-					error && "border-danger"
+					" bg-card flex-row h-12 rounded-lg w-full border border-muted/15 ",
+					inputContainerClassName,
+					error && "border-danger",
+					isFocused && "border-foreground"
 				)}
-				placeholderTextColor={tw.color("muted")}
-				secureTextEntry={!showPassword}
-				{...props}
-			/>
+			>
+				{leftElement}
+				<TextInput
+					value={value}
+					onChangeText={onChangeText}
+					ref={inputRef}
+					className={cn(
+						" text-foreground p-2 rounded-lg flex-1 text-[16px]",
+						formatter && "opacity-0 scale-0 flex-0 absolute",
+						className
+					)}
+					placeholderTextColor={tw.color("muted")}
+					secureTextEntry={!showPassword}
+					{...props}
+					onFocus={(e) => {
+						setIsFocused(true);
+						props?.onFocus?.(e);
+					}}
+					onBlur={(e) => {
+						setIsFocused(false);
+						props?.onBlur?.(e);
+					}}
+				/>
+				{formatter && (
+					<Pressable
+						className={cn(
+							" text-foreground p-2 flex-row rounded-lg text-left items-center h-full flex-1 text-[16px]",
+							className
+						)}
+						onPress={() => {
+							inputRef?.current?.focus();
+						}}
+					>
+						{formatter(value)}
+						{isFocused && <InputBlink />}
+						{!value && (
+							<Text className={cn("text-muted/75 absolute left-0 p-2")}>
+								{props.placeholder}
+							</Text>
+						)}
+					</Pressable>
+				)}
+
+				{rightElement}
+			</View>
 			{helperText && <Text className="text-muted text-sm">{helperText}</Text>}
 
-			{leftElement && (
-				<View className="absolute left-2 bottom-2">{leftElement}</View>
-			)}
-
-			{rightElement && (
-				<View className="absolute right-2 bottom-2">{rightElement}</View>
-			)}
 			{error && <Text className="text-danger text-sm">{error}</Text>}
 
 			{isSecretToggleable && (
@@ -109,5 +146,30 @@ const BaseInput = <T extends Record<string, any>>({
 				/>
 			)}
 		</View>
+	);
+};
+
+const InputBlink = () => {
+	const tw = useTw();
+	return (
+		<MotiView
+			style={{
+				width: 0.1,
+				height: "90%",
+				opacity: 1,
+				marginHorizontal: 0.8,
+				backgroundColor: tw.color("foreground/85"),
+			}}
+			from={{
+				opacity: 0,
+			}}
+			animate={{
+				opacity: 1,
+			}}
+			transition={{
+				duration: 650,
+				loop: true,
+			}}
+		/>
 	);
 };

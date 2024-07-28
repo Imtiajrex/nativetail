@@ -1,6 +1,7 @@
 import { cn, Pressable, Text, useTw, View } from "@nativetail/core";
 import { AnimatePresence } from "moti";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Modal } from "react-native";
 import { Iconify } from "react-native-iconify";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { create } from "zustand";
@@ -19,6 +20,8 @@ type ToastType = {
 
 	containerClassName?: string;
 	type?: "success" | "danger" | "info" | "warning";
+	modal?: boolean;
+	icon?: React.ReactNode;
 };
 type InsertToastType = Omit<ToastType, "id">;
 type ToastStore = {
@@ -57,7 +60,6 @@ export function Toaster() {
 	const bottomToasts = toasts.filter((toast) =>
 		toast.position.includes("bottom")
 	);
-
 	const safeInsets = useSafeAreaInsets();
 	return (
 		<AnimatePresence exitBeforeEnter presenceAffectsLayout>
@@ -90,6 +92,34 @@ export function Toaster() {
 }
 
 const Toast = (
+	toast: ToastType & {
+		index: number;
+	}
+) => {
+	const safeInsets = useSafeAreaInsets();
+	const [visible, setVisible] = useState(true);
+	const close = useCallback(() => {
+		setVisible(false);
+	}, [setVisible]);
+	if (toast.modal)
+		return (
+			<Modal visible={visible} onRequestClose={close} transparent>
+				<Pressable
+					className={cn(
+						"absolute w-full h-full bg-black/15 left-0 justify-start z-50 gap-2",
+						toast.position.includes("top")
+							? `pt-[${safeInsets.top + 10}px]`
+							: `pb-[${safeInsets.bottom + 10}px]`
+					)}
+					onPress={close}
+				>
+					<BaseToast {...toast} />
+				</Pressable>
+			</Modal>
+		);
+	return <BaseToast {...toast} />;
+};
+const BaseToast = (
 	toast: ToastType & {
 		index: number;
 	}
@@ -136,7 +166,7 @@ const Toast = (
 		),
 	};
 
-	const Icon = Icons[toast.type];
+	const Icon = toast.icon || Icons[toast.type];
 	const horizontalPositions = {
 		center: "items-center",
 		left: "items-start",

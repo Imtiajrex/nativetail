@@ -11,6 +11,7 @@ export type BottomSheetProps = ActionSheetProps & {
 	indicatorClassName?: string;
 	useBlur?: boolean;
 };
+export type BottomSheetRef = ActionSheetRef;
 export const BottomSheet = forwardRef<ActionSheetRef, BottomSheetProps>(
 	function BottomSheet(
 		{
@@ -27,7 +28,7 @@ export const BottomSheet = forwardRef<ActionSheetRef, BottomSheetProps>(
 		return (
 			<ActionSheet
 				ref={ref}
-				containerStyle={tw.style("bg-background/95", containerClassName)}
+				containerStyle={tw.style("bg-background", containerClassName)}
 				gestureEnabled
 				indicatorStyle={tw.style("bg-muted/15", indicatorClassName)}
 				{...props}
@@ -42,4 +43,3 @@ export const BottomSheet = forwardRef<ActionSheetRef, BottomSheetProps>(
 		);
 	}
 );
-export { ActionSheetRef as BottomSheetRef };

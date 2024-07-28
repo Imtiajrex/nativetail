@@ -4,7 +4,7 @@ import { memo, useCallback, useMemo } from "react";
 import { Iconify } from "react-native-iconify";
 import { Control, Controller, Path } from "react-hook-form";
 
-type SelectProps<T extends Record<string, any>> = PressableProps & {
+export type SelectProps<T = Record<string, any>> = PressableProps & {
 	containerClassName?: string;
 	label?: string;
 	error?: string;

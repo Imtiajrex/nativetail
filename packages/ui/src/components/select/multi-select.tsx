@@ -11,7 +11,7 @@ import { memo, useCallback, useMemo } from "react";
 import { Iconify } from "react-native-iconify";
 import { Control, Controller, Path } from "react-hook-form";
 
-type SelectProps<T extends Record<string, any>> = PressableProps & {
+export type MultiSelectProps<T = Record<string, any>> = PressableProps & {
 	containerClassName?: string;
 	label?: string;
 	error?: string;
@@ -31,7 +31,7 @@ export const MultiSelect = <T extends Record<string, any>>({
 	name,
 	control,
 	...props
-}: SelectProps<T>) => {
+}: MultiSelectProps<T>) => {
 	if (control) {
 		return (
 			<Controller
@@ -65,7 +65,7 @@ function BaseSelect<T extends Record<string, any>>({
 	placeholder,
 	options,
 	...props
-}: SelectProps<T>) {
+}: MultiSelectProps<T>) {
 	const tw = useTw();
 	const renderOptions = useCallback(() => {
 		return options.map((option, index) => (
@@ -112,11 +112,11 @@ const SelectTrigger = memo(
 		error,
 		...props
 	}: PressableProps & {
-		options: SelectProps<T>["options"];
-		value: SelectProps<T>["value"];
-		onChange: SelectProps<T>["onChange"];
-		placeholder: SelectProps<T>["placeholder"];
-		error: SelectProps<T>["error"];
+		options: MultiSelectProps<T>["options"];
+		value: MultiSelectProps<T>["value"];
+		onChange: MultiSelectProps<T>["onChange"];
+		placeholder: MultiSelectProps<T>["placeholder"];
+		error: MultiSelectProps<T>["error"];
 	}) => {
 		const selectedOptions = useMemo(
 			() => options.filter((option) => value?.includes?.(option.value)),

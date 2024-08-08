@@ -1,5 +1,3 @@
-import { BlurView } from "expo-blur";
-import { AnimatePresence } from "moti";
 import {
 	mergeClasses,
 	Pressable,
@@ -7,6 +5,7 @@ import {
 	useTw,
 	View,
 } from "@nativetail/core";
+import { AnimatePresence } from "moti";
 import React, {
 	ReactNode,
 	useCallback,
@@ -20,6 +19,8 @@ import {
 	Modal,
 	View as NativeView,
 	StatusBar,
+	useWindowDimensions,
+	ViewStyle,
 } from "react-native";
 import { Blur } from "../blur";
 
@@ -28,6 +29,7 @@ type PositionType = {
 	height: number;
 	top: number;
 	left: number;
+	right: number;
 	bottom: number;
 };
 type DropdownState = {
@@ -97,12 +99,14 @@ const DropdownTrigger = ({
 				const top = isFull ? 20 : height + pageY + 2;
 				const bottom = H - top + height;
 				const left = I18nManager.isRTL ? W - width - pageX : pageX;
+				const right = W - left - width;
 
 				setPosition({
 					width: Math.floor(width),
 					top: Math.floor(top + statusBarHeight),
 					bottom: Math.floor(bottom - statusBarHeight),
 					left: Math.floor(left),
+					right: Math.floor(right),
 					height: Math.floor(height),
 				});
 			});
@@ -142,7 +146,24 @@ const DropdownMenu = ({
 	const top = position?.top || 0;
 	const menuX = left;
 	const menuY = top;
+	const width = position?.width || 0;
+	const screen = useWindowDimensions();
+	const tw = useTw();
+	const style = tw`${className}`;
+	const styleWidth = !isNaN(Number(style?.width)) ? Number(style?.width) : 0;
+	const menuWidth = styleWidth || width || 0;
+	const isEndOfScreen = screen.width - menuX < menuWidth;
+	const menuStyle: ViewStyle = {
+		top: menuY,
+		left: menuX,
+		transformOrigin: "top left",
+	};
+	if (isEndOfScreen) {
+		menuStyle.left = menuX - menuWidth + width;
+		menuStyle.transformOrigin = "top right";
+	}
 	const [modalOpen, setModalOpen] = useState(isOpen);
+
 	useEffect(() => {
 		if (isOpen) {
 			setModalOpen(true);
@@ -164,7 +185,6 @@ const DropdownMenu = ({
 			setModalOpen(false);
 		}
 	}, [isOpen]);
-	const tw = useTw();
 	const renderChildren = useCallback(() => {
 		return React.Children.map(children, (child, index) => {
 			return React.cloneElement(child as any, {
@@ -186,18 +206,14 @@ const DropdownMenu = ({
 					{isOpen && (
 						<View
 							className={mergeClasses(
-								"absolute in:scale-0 scale-100 out:scale-0 overflow-hidden z-10 bg-card/95 rounded-xl max-w-xs w-full  border border-muted/15",
+								"absolute in:scale-0 scale-100 out:scale-0 overflow-hidden z-10 bg-card/95 rounded-xl  border border-muted/15",
+								width ? `w-[${width}px]` : "",
 								className
 							)}
 							onDidAnimate={onDidAnimate}
-							style={{
-								top: menuY,
-								left: menuX,
-								transformOrigin: "top left",
-							}}
+							style={menuStyle}
 							animated
 							print
-							id={"1"}
 						>
 							{useBlur && (
 								<Blur style={tw`absolute top-0 left-0 rounded-xl flex-1 `} />

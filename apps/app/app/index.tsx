@@ -1,606 +1,78 @@
-import {
-	ScrollView,
-	Text,
-	useThemeContext,
-	useTw,
-	View,
-} from "@nativetail/core";
-import {
-	ActionSheet,
-	ActionSheetRef,
-	AlertDialog,
-	AlertDialogRef,
-	BottomSheet,
-	BottomSheetRef,
-	Button,
-	Chip,
-	Counter,
-	Dialog,
-	DialogMethods,
-	Dropdown,
-	FloatingInput,
-	FormBuilder,
-	Input,
-	MultiSelect,
-	PhoneInput,
-	PinInput,
-	Progress,
-	Select,
-	showToast,
-	Switch,
-} from "@nativetail/ui";
-import { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { TextInput } from "react-native";
-import { Iconify } from "react-native-iconify";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { FlatList, Text, View } from "@nativetail/core";
+import { Link } from "expo-router";
 export default function Index() {
 	return (
-		<View className="flex-1 bg-background">
-			<AllDemo />
+		<View className="container">
+			<FlatList
+				data={components}
+				renderItem={({ item }) => (
+					<Link
+						href={item.link}
+						style={{
+							width: "100%",
+						}}
+						asChild
+					>
+						<View className="w-full">
+							<View className="p-4 border-b border-muted/15">
+								<Text>{item.name}</Text>
+							</View>
+						</View>
+					</Link>
+				)}
+				keyExtractor={(item) => item.link}
+			/>
 		</View>
 	);
 }
-const AllDemo = () => {
-	return (
-		<ScrollView className="gap-2 container" containerClass="flex-1">
-			<Text className="text-foreground">Hellow</Text>
-			<FormBuilderDemo />
-			<FormDemo />
-			<DropdownContent />
-			<SwitchContent />
-			<FloatingInputContent />
-			<FloatingPassword />
-			<PinContent />
-			<InputContent />
-			<SelectContent />
-			<MultiSelectDemo />
 
-			<AlertDialogContent />
-			<BottomSheetContent />
-			<ActionSheetContent />
-			<DialogDemo />
-			<View className="flex-row gap-2">
-				<Chip text="Burger" />
-				<Chip text="Hotdogs" variant={"card"} />
-				<Chip text="Veggies" variant={"outline"} />
-				<Chip text="Sandwich" variant={"destructive"} />
-				<Chip text="Sandwich" variant={"secondary"} className="text-black" />
-				<Chip text="Sandwich" variant={"success"} />
-			</View>
-			<ProgressContent />
-		</ScrollView>
-	);
-};
-const sleep = async (sleepMs: number) =>
-	new Promise((resolve) => {
-		setTimeout(() => resolve(true), sleepMs);
-	});
-
-const FormBuilderDemo = () => {
-	const schema = z.object({
-		name: z.string().min(2).max(10),
-		email: z.string().email(),
-		pin: z.string().length(5),
-		ageGroup: z.enum(["1", "2", "3"]),
-		skills: z.array(z.enum(["1", "2", "3"])),
-		phone: z.string().length(10).optional(),
-	});
-	type FormSchema = z.infer<typeof schema>;
-	const submit = useMutation({
-		mutationFn: async (values: FormSchema) => {
-			await sleep(1500);
-		},
-		onSuccess: () => {
-			showToast({
-				message: "Form submitted!",
-				content: "Form has been submitted successfully!",
-				type: "success",
-			});
-		},
-		onError: () => {
-			showToast({
-				message: "Failed!",
-				content: "Failed to submit form!",
-				type: "danger",
-			});
-		},
-	});
-	return (
-		<View className="gap-2 p-4  rounded-2xl border bg-card border-muted/15 ">
-			<Text className=" text-xl">Form Builder Demo</Text>
-			<FormBuilder
-				schema={schema}
-				inputs={{
-					name: {
-						type: "text",
-						props: {
-							label: "Name",
-						},
-					},
-					email: {
-						type: "text",
-						props: {
-							label: "Email",
-						},
-					},
-					ageGroup: {
-						type: "select",
-						props: {
-							label: "Age Group",
-							placeholder: "Select Age Group",
-							options: [
-								{
-									label: "18 - 24",
-									value: "1",
-								},
-								{
-									label: "25 - 30",
-									value: "2",
-								},
-							],
-						},
-					},
-					pin: {
-						type: "pin",
-						props: {
-							length: 5,
-						},
-					},
-					phone: {
-						type: "phone",
-						props: {},
-					},
-					skills: {
-						type: "multi-select",
-						props: {
-							label: "Skills",
-							placeholder: "Select Skills",
-							options: [
-								{
-									label: "React",
-									value: "1",
-								},
-								{
-									label: "Vue",
-									value: "2",
-								},
-							],
-						},
-					},
-				}}
-				onSubmit={submit.mutate}
-				onError={(errors) => {
-					console.log(errors);
-					showToast({
-						message: "Some error occured!",
-						type: "danger",
-						modal: true,
-					});
-				}}
-				isSubmitting={submit.isPending}
-				defaultValues={{
-					pin: "",
-				}}
-			/>
-		</View>
-	);
-};
-const FormDemo = () => {
-	const schema = z.object({
-		name: z.string().min(2).max(10),
-		email: z.string().email(),
-		pin: z.string().length(5),
-		ageGroup: z.enum(["1", "2", "3"]),
-		skills: z.array(z.enum(["1", "2", "3"])),
-		phone: z.string().length(10).optional(),
-	});
-	type FormSchema = z.infer<typeof schema>;
-	const { control, handleSubmit, reset } = useForm<FormSchema>({
-		resolver: zodResolver(schema),
-		reValidateMode: "onChange",
-		defaultValues: {
-			name: "",
-			email: "",
-			pin: "",
-			skills: [],
-			phone: "",
-		},
-	});
-	const submit = useMutation({
-		mutationFn: async (values: FormSchema) => {
-			await sleep(1500);
-		},
-		onSuccess: () => {
-			showToast({
-				message: "Form submitted!",
-				content: "Form has been submitted successfully!",
-				type: "success",
-			});
-		},
-		onError: () => {
-			showToast({
-				message: "Failed!",
-				content: "Failed to submit form!",
-				type: "danger",
-			});
-		},
-	});
-	return (
-		<View className="gap-2 p-4  rounded-2xl border bg-card border-muted/15 ">
-			<Text className=" text-xl">Form Demo</Text>
-			<Input control={control} name={"name"} label="Name" />
-			<FloatingInput control={control} name={"email"} label="Email" />
-			<PinInput control={control} name={"pin"} length={5} />
-			<PhoneInput control={control} name={"phone"} />
-			<Select
-				control={control}
-				name="ageGroup"
-				options={[
-					{
-						label: "18 - 24",
-						value: "1",
-					},
-					{
-						label: "25 - 30",
-						value: "2",
-					},
-					{
-						label: "30 - 40",
-						value: "3",
-					},
-				]}
-				label="Age Group"
-				placeholder="Select Age Group"
-			/>
-			<MultiSelect
-				control={control}
-				name="skills"
-				options={[
-					{
-						label: "React",
-						value: "1",
-					},
-					{
-						label: "Vue",
-						value: "2",
-					},
-					{
-						label: "Svelte",
-						value: "3",
-					},
-				]}
-				label="Skills"
-				placeholder="Select Skills"
-			/>
-			<Button
-				className="text-white active:scale-95 scale-100 select-none"
-				onPress={() => {
-					handleSubmit(
-						(values) => {
-							submit.mutate(values);
-						},
-						(errors) => console.log(errors)
-					)();
-				}}
-				isLoading={submit.isPending}
-			>
-				<Text
-					className="text-sm font-medium text-white select-none"
-					selectable={false}
-				>
-					Control
-				</Text>
-			</Button>
-		</View>
-	);
-};
-const DialogDemo = () => {
-	const dialogRef = useRef<DialogMethods>(null);
-	return (
-		<>
-			<Dialog contentClassName="p-4" ref={dialogRef}>
-				<Text>Hello World from dialog!</Text>
-			</Dialog>
-			<Button
-				className="w-full"
-				variant={"outline"}
-				onPress={() => {
-					dialogRef.current?.show();
-				}}
-			>
-				Open Dialog
-			</Button>
-		</>
-	);
-};
-const ProgressContent = () => {
-	const [value, setValue] = useState(50);
-	return (
-		<>
-			<Progress progress={value} max={100} />
-			<Counter
-				value={value}
-				setValue={setValue}
-				max={100}
-				min={20}
-				containerClassName=" max-w-45"
-			/>
-		</>
-	);
-};
-const SwitchContent = () => {
-	const { colorScheme, setColorScheme, setTheme } = useThemeContext();
-	return (
-		<Switch
-			checked={colorScheme === "dark"}
-			onChange={(value) => {
-				setColorScheme(value ? "dark" : "light");
-				setTheme(require("../dark.tailwind.config"));
-			}}
-		/>
-	);
-};
-const NativeInputContent = () => {
-	const [name, setName] = useState("");
-	return (
-		<TextInput value={name} onChangeText={setName} placeholder="Enter name" />
-	);
-};
-const FloatingInputContent = () => {
-	const [name, setName] = useState("");
-	return (
-		<FloatingInput
-			label="Name"
-			value={name}
-			onChangeText={setName}
-			containerClassName="h-13"
-			activeLabelClassName="-translate-y-12 "
-			labelClassName="text-sm"
-			className="text-sm pt-5"
-		/>
-	);
-};
-const PinContent = () => {
-	const [pin, setPin] = useState("");
-	return (
-		<PinInput
-			value={pin}
-			onChangeText={setPin}
-			length={4}
-			containerClassName="w-full max-w-sm mx-auto"
-			pinBoxClassName="h-14 text-xl"
-			secureTextEntry
-		/>
-	);
-};
-const FloatingPassword = () => {
-	const [secret, setSecret] = useState("");
-	return (
-		<FloatingInput
-			label="Secret"
-			value={secret}
-			onChangeText={setSecret}
-			isSecretToggleable
-		/>
-	);
-};
-const InputContent = () => {
-	const [password, setPass] = useState("");
-	return (
-		<Input
-			label="Password"
-			value={password}
-			onChangeText={setPass}
-			placeholder="Enter Password"
-			isSecretToggleable
-		/>
-	);
-};
-const DropdownContent = () => {
-	const tw = useTw();
-	return (
-		<Dropdown.Root>
-			<Dropdown.Trigger className="w-12 h-12 rounded-full bg-card items-center justify-center">
-				<Iconify icon="mage:dots" size={24} color={tw.color("foreground")} />
-			</Dropdown.Trigger>
-			<Dropdown.Menu className="duration-75">
-				<Dropdown.Item
-					onPress={() => {
-						showToast({
-							message: "Item 1",
-							content: "Item 1 has been clicked",
-							position: "top-left",
-							type: "danger",
-						});
-					}}
-				>
-					Item 1
-				</Dropdown.Item>
-				<Dropdown.Item
-					onPress={() => {
-						showToast({
-							message: "Item 2",
-							content: "Item 2 has been clicked",
-							position: "top-left",
-							type: "warning",
-						});
-					}}
-				>
-					Item 2
-				</Dropdown.Item>
-				<Dropdown.Item>Item 3</Dropdown.Item>
-			</Dropdown.Menu>
-		</Dropdown.Root>
-	);
-};
-const SelectContent = () => {
-	const [framework, setFramework] = useState("");
-
-	return (
-		<Select
-			label="Select Framework"
-			value={framework}
-			onChange={setFramework}
-			placeholder="Select Framework"
-			options={[
-				{
-					label: "React",
-					value: "react",
-				},
-				{
-					label: "Vue",
-					value: "vue",
-				},
-				{
-					label: "Angular",
-					value: "angular",
-				},
-			]}
-		/>
-	);
-};
-const MultiSelectDemo = () => {
-	const [framework, setFramework] = useState<string[]>([]);
-
-	return (
-		<MultiSelect
-			label="Select Multi Framworkd"
-			value={framework}
-			onChange={setFramework}
-			placeholder="Select multi frame work"
-			options={[
-				{
-					label: "React",
-					value: "react",
-				},
-				{
-					label: "Vue",
-					value: "vue",
-				},
-				{
-					label: "Angular",
-					value: "angular",
-				},
-			]}
-		/>
-	);
-};
-const AlertDialogContent = () => {
-	const ref = useRef<AlertDialogRef>(null);
-
-	return (
-		<>
-			<Button
-				className="group w-full active:scale-95 scale-100"
-				onPress={() => {
-					ref?.current?.show();
-				}}
-			>
-				Open Alert Dialog
-			</Button>
-			<AlertDialog
-				ref={ref}
-				onCancel={() => {
-					ref?.current?.hide();
-				}}
-				onConfirm={() => {
-					ref?.current?.hide();
-					showToast({
-						message: "Deleted Successfully",
-						content: "The item has been deleted successfully",
-						position: "top-right",
-						type: "success",
-					});
-				}}
-				title="Are you sure you want to delete this item?"
-				description="This action cannot be undone"
-			/>
-		</>
-	);
-};
-
-const BottomSheetContent = () => {
-	const bottomSheetRef = useRef<BottomSheetRef>(null);
-
-	return (
-		<>
-			<Button
-				className="group w-full active:scale-95 scale-100"
-				onPress={() => {
-					bottomSheetRef?.current?.show();
-				}}
-			>
-				Open Bottom Sheet
-				<View className=" absolute right-12 scale-0 -translate-x-16 group-hover:scale-100 group-hover:translate-x-0 group-active:scale-100 group-active:translate-x-0">
-					<Iconify icon="mdi:plus-circle" size={24} color={"white"} />
-				</View>
-			</Button>
-			<BottomSheet
-				ref={bottomSheetRef}
-				contentClassName="max-w-2xl mx-auto w-full"
-			>
-				<Text className="text-center font-medium text-lg">Create User</Text>
-				<Input label="Name" placeholder="Enter Name" className="bg-card" />
-				<Input label="Email" placeholder="Enter Email" className="bg-card" />
-				<Button
-					variant={"link"}
-					onPress={() => {
-						bottomSheetRef?.current?.hide();
-					}}
-				>
-					Close
-				</Button>
-			</BottomSheet>
-		</>
-	);
-};
-
-const ActionSheetContent = () => {
-	const ref = useRef<ActionSheetRef>(null);
-	return (
-		<>
-			<Button
-				className="group w-full active:scale-95 scale-100"
-				onPress={() => {
-					ref?.current?.show();
-				}}
-			>
-				Open Action Sheet
-				<View className=" absolute right-12 scale-0 -translate-x-16 group-hover:scale-100 group-hover:translate-x-0 group-active:scale-100 group-active:translate-x-0">
-					<Iconify icon="mdi:plus-circle" size={24} color={"white"} />
-				</View>
-			</Button>
-
-			<ActionSheet
-				onCancel={() => {
-					ref?.current?.hide();
-				}}
-				ref={ref}
-				options={[
-					{
-						onPress: () => {
-							ref?.current?.hide();
-						},
-						text: "Edit This Item",
-					},
-					{
-						onPress: () => {
-							ref?.current?.hide();
-							showToast({
-								message: "Deleted Successfully",
-								content: "The item has been deleted successfully",
-								position: "bottom-center",
-								type: "success",
-							});
-						},
-						text: "Delete This Item",
-						className: "text-red-500",
-					},
-				]}
-			/>
-		</>
-	);
-};
+const components = [
+	{
+		name: "Switch",
+		link: "/Switch",
+	},
+	{
+		name: "Chips",
+		link: "/Chips",
+	},
+	{
+		name: "Select",
+		link: "/Select",
+	},
+	{
+		name: "Input",
+		link: "/Input",
+	},
+	{
+		name: "Dropdown",
+		link: "/Dropdown",
+	},
+	{
+		name: "Progress",
+		link: "/Progress",
+	},
+	{
+		name: "Action Sheet",
+		link: "/Action-Sheet",
+	},
+	{
+		name: "Alert Dialog",
+		link: "/Alert-Dialog",
+	},
+	{
+		name: "Bottom Sheet",
+		link: "/Bottom-Sheet",
+	},
+	{
+		name: "Dialog",
+		link: "/Dialog",
+	},
+	{
+		name: "Form",
+		link: "/Form",
+	},
+	{
+		name: "Form Builder",
+		link: "/Form-Builder",
+	},
+];

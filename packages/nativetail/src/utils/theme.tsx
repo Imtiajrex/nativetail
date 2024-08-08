@@ -61,7 +61,7 @@ export const ThemeProvider = ({
 export const useThemeContext = () => {
 	const themeContext = useContext(ThemeContext);
 	if (!themeContext.theme) {
-		console.error("No theme context found");
+		console.warn("No theme context found");
 	}
 	return themeContext;
 };
@@ -73,7 +73,7 @@ export const useColorScheme = () => {
 export const useTw = () => {
 	const twContext = useContext(ThemeContext);
 	if (!twContext.tw) {
-		console.error("No tw context found");
+		console.warn("No tw context found");
 		return create(require("../../tailwind.config.js"));
 	}
 	const tw = twContext.tw;

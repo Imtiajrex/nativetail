@@ -55,7 +55,8 @@ export default function _layout() {
 								<View className="flex-1 bg-background">
 									<Stack
 										screenOptions={{
-											headerShown: false,
+											headerTitleAlign: "center",
+											headerLargeTitle: true,
 										}}
 									/>
 

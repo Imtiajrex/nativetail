@@ -51,7 +51,6 @@ function BaseSelect<T extends Record<string, any>>({
 	containerClassName,
 	label,
 	error,
-	className,
 	value,
 	onChange,
 	helperText,

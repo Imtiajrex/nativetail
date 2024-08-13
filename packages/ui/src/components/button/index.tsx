@@ -8,6 +8,7 @@ import {
 	mergeClasses,
 	Pressable,
 	separateClasses,
+	useColor,
 	useTw,
 	VariantProps,
 } from "@nativetail/core";
@@ -15,11 +16,11 @@ import { MotiPressableProps } from "moti/interactions";
 import { useComponentTheme } from "../../utils/component-theme";
 
 const buttonVariants = cva(
-	"flex-row gap-2 items-center justify-center rounded text-sm font-medium hover:opacity-90 active:opacity-80 opacity-100 select-none",
+	"flex-row gap-2 items-center justify-center rounded text-sm font-medium hover:opacity-90 active:opacity-50 duration-30 opacity-100 select-none",
 	{
 		variants: {
 			variant: {
-				default: "bg-primary  text-foreground ",
+				default: "bg-primary text-primary-foreground ",
 				destructive: "bg-red-500 text-foreground  ",
 				outline: "border border-muted/15 text-foreground bg-black/0  ",
 				secondary: "bg-secondary text-foreground  ",
@@ -128,24 +129,26 @@ const Button = (passedProps: ButtonProps) => {
 	const { textClasses } = separateClasses(variantClass);
 
 	return (
-		<Pressable
-			disabled={disabled || loading}
-			className={variantClass}
-			{...props}
-		>
-			{leftElement}
-			{loading && (
-				<ActivityIndicator
-					className={mergeClasses(
-						"mr-2 h-5 w-5 text-foreground ",
-						textClasses,
-						loadingIndicatorClassName
-					)}
-				/>
-			)}
-			{children}
-			{rightElement}
-		</Pressable>
+		<>
+			<Pressable
+				disabled={disabled || loading}
+				className={variantClass}
+				{...props}
+			>
+				{leftElement}
+				{loading && (
+					<ActivityIndicator
+						className={mergeClasses(
+							"mr-2 h-5 w-5 text-primary-foreground ",
+							textClasses,
+							loadingIndicatorClassName
+						)}
+					/>
+				)}
+				{children}
+				{rightElement}
+			</Pressable>
+		</>
 	);
 };
 export { Button };

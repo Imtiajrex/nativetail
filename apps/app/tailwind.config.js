@@ -1,4 +1,5 @@
 const plugin = require("tailwindcss/plugin");
+
 module.exports = {
 	theme: {
 		screens: {
@@ -10,7 +11,10 @@ module.exports = {
 		},
 		extend: {
 			colors: {
-				primary: "#C8264B",
+				primary: {
+					DEFAULT: "#FF6B6B",
+					foreground: "#000",
+				},
 				secondary: '#EBB461',
 				background: '#F2F2F2',
 				card: '#fff',
@@ -21,6 +25,10 @@ module.exports = {
 				warning: '#FFC107',
 				info: '#00BCD4',
 			},
+			borderRadius: {
+				DEFAULT: '16px',
+				"sm": "24px"
+			}
 		},
 	},
 	plugins: [

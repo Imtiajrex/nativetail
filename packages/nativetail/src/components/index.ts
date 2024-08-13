@@ -6,3 +6,4 @@ export * from "./image";
 export * from "./text";
 export * from "./TextInput";
 export * from "./view";
+export * from "./TouchableOpacity";

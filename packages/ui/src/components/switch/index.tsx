@@ -51,7 +51,7 @@ export function Switch({
 		<Pressable
 			className={cn(
 				className,
-				checked ? "bg-primary/35 " + containerActiveClass : ""
+				checked ? "bg-primary " + containerActiveClass : ""
 			)}
 			aria-checked={checked}
 			accessibilityRole="switch"
@@ -63,6 +63,7 @@ export function Switch({
 				className={cn(
 					`rounded-full bg-primary aspect-square h-full`,
 					indicatorClassName,
+					checked ? "bg-card" : "",
 					x
 				)}
 				animated

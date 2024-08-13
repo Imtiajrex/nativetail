@@ -17,3 +17,4 @@ export * from "./form-builder";
 export * from "./check";
 export * from "./card";
 export * from "./indicator";
+export * from "./loader-dialog";

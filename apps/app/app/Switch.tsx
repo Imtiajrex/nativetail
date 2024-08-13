@@ -1,15 +1,15 @@
 import { useThemeContext, View } from "@nativetail/core";
 import { Switch } from "@nativetail/ui";
+import { useState } from "react";
 
 export default function Page() {
-	const { colorScheme, setColorScheme, setTheme } = useThemeContext();
+	const [checked, setChecked] = useState(false);
 	return (
 		<View className="container">
 			<Switch
-				checked={colorScheme === "dark"}
+				checked={checked}
 				onChange={(value) => {
-					setColorScheme(value ? "dark" : "light");
-					setTheme(require("../dark.tailwind.config"));
+					setChecked(value);
 				}}
 			/>
 		</View>

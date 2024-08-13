@@ -1,4 +1,4 @@
-import { Text, View } from "@nativetail/core";
+import { cn, Text, View } from "@nativetail/core";
 import { forwardRef } from "react";
 import { Button } from "../button";
 import { Dialog, DialogMethods } from "../dialog";
@@ -10,11 +10,26 @@ export type AlertDialogProps = {
 	title?: string;
 	description?: string;
 	useBlur?: boolean;
+	confirmClassName?: string;
+	cancelClassName?: string;
+	confirmText?: string;
+	cancelText?: string;
 };
 export type AlertDialogRef = DialogMethods;
 export const AlertDialog = forwardRef<DialogMethods, AlertDialogProps>(
 	function AlertDialog(
-		{ containerClassName, onConfirm, title, description, useBlur, onCancel },
+		{
+			containerClassName,
+			onConfirm,
+			confirmText = "Confirm",
+			cancelText = "Cancel",
+			cancelClassName,
+			confirmClassName,
+			title,
+			description,
+			useBlur,
+			onCancel,
+		},
 		ref
 	) {
 		return (
@@ -39,17 +54,23 @@ export const AlertDialog = forwardRef<DialogMethods, AlertDialogProps>(
 				<View className="flex-row items-center  border-t border-muted/15">
 					<Button
 						variant="link"
-						className="flex-1 active:opacity-75 text-foreground rounded-none"
+						className={cn(
+							"flex-1 active:opacity-75 text-foreground rounded-none",
+							cancelClassName
+						)}
 						onPress={onCancel}
 					>
-						Cancel
+						{cancelText}
 					</Button>
 					<Button
 						variant="link"
-						className="flex-1 border active:opacity-75 border-transparent rounded-none border-l-muted/15"
+						className={cn(
+							"flex-1 border active:opacity-75 border-transparent rounded-none border-l-muted/15",
+							cancelClassName
+						)}
 						onPress={onConfirm}
 					>
-						Confirm
+						{confirmText}
 					</Button>
 				</View>
 			</Dialog>

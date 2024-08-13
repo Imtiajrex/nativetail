@@ -110,7 +110,7 @@ const FormDemo = () => {
 				placeholder="Select Skills"
 			/>
 			<Button
-				className="text-white active:scale-95 scale-100 select-none"
+				className="active:scale-95 scale-100 select-none"
 				onPress={() => {
 					handleSubmit(
 						(values) => {
@@ -121,12 +121,7 @@ const FormDemo = () => {
 				}}
 				isLoading={submit.isPending}
 			>
-				<Text
-					className="text-sm font-medium text-white select-none"
-					selectable={false}
-				>
-					Control
-				</Text>
+				Control
 			</Button>
 		</View>
 	);

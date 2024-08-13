@@ -1,15 +1,13 @@
 import { cn, Pressable, Text, useColor, useTw, View } from "@nativetail/core";
 import {
-	CheckCheck,
+	CheckCircle2,
 	Info,
 	OctagonAlert,
 	OctagonX,
-	X,
 } from "lucide-react-native";
 import { AnimatePresence } from "moti";
 import { useCallback, useEffect, useState } from "react";
 import { Modal } from "react-native";
-import { Iconify } from "react-native-iconify";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { create } from "zustand";
 type ToastType = {
@@ -57,7 +55,6 @@ const useToastState = create<ToastStore>((set) => ({
 let timeouts = new Map<string, NodeJS.Timeout>();
 export const showToast = (toast: InsertToastType) => {
 	const id = Math.random().toString(36).substring(7);
-	console.log(id);
 	useToastState.getState().addToast({ ...toast, id });
 	return id;
 };
@@ -115,8 +112,8 @@ const Toast = (
 					className={cn(
 						"absolute w-full h-full bg-black/15 left-0 justify-start z-50 gap-2",
 						toast.position.includes("top")
-							? `pt-[${safeInsets.top + 10}px]`
-							: `pb-[${safeInsets.bottom + 10}px]`
+							? `pt-[${safeInsets.top + 10}px] top-0`
+							: `pb-[${safeInsets.bottom + 10}px] bottom-0 justify-end`
 					)}
 					onPress={close}
 				>
@@ -147,7 +144,7 @@ const BaseToast = (
 	}, [toast.id]);
 
 	const Icons = {
-		success: <CheckCheck size={20} color={useColor("success")} />,
+		success: <CheckCircle2 size={20} color={useColor("success")} />,
 		danger: <OctagonX size={20} color={useColor("danger")} />,
 		info: <Info size={20} color={useColor("info")} />,
 		warning: <OctagonAlert size={20} color={useColor("warning")} />,

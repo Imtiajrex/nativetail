@@ -1,5 +1,5 @@
-import { Text, View } from "@nativetail/core";
-import { FormBuilder, showToast } from "@nativetail/ui";
+import { Text, useColor, View } from "@nativetail/core";
+import { Button, FormBuilder, showToast } from "@nativetail/ui";
 import { useMutation } from "@tanstack/react-query";
 import { sleep } from "utils/sleep";
 import { z } from "zod";
@@ -109,6 +109,7 @@ export default function FormBuilderDemo() {
 					pin: "",
 				}}
 			/>
+			<Button className="text-primary-foreground">Hello</Button>
 		</View>
 	);
 }

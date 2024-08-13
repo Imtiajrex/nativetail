@@ -86,7 +86,7 @@ const ActionSheetItem = ({
 		<Button
 			variant="link"
 			className={cn(
-				"w-full items-center opacity-100  active:opacity-50 text-[16px] h-14 text-blue-500 rounded-none border-b ",
+				"w-full items-center opacity-100  active:opacity-50 text-sm h-14 text-blue-500 rounded-none border-b ",
 				last ? "border-transparent" : "border-muted/15",
 				className
 			)}

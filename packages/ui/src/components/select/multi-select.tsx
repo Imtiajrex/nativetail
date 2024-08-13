@@ -3,6 +3,7 @@ import {
 	Pressable,
 	PressableProps,
 	Text,
+	useColor,
 	useTw,
 	View,
 } from "@nativetail/core";
@@ -10,6 +11,7 @@ import { Dropdown } from "../dropdown";
 import { memo, useCallback, useMemo } from "react";
 import { Iconify } from "react-native-iconify";
 import { Control, Controller, Path } from "react-hook-form";
+import { CheckCheck, CheckIcon, ChevronDown } from "lucide-react-native";
 
 export type MultiSelectProps<T = Record<string, any>> = PressableProps & {
 	containerClassName?: string;
@@ -150,11 +152,7 @@ const SelectTrigger = memo(
 					{selectedOptions.length == 0 && placeholder && (
 						<Text className="text-muted">{placeholder}</Text>
 					)}
-					<Iconify
-						icon="solar:alt-arrow-down-outline"
-						size={20}
-						color={tw.color("foreground")}
-					/>
+					<ChevronDown size={20} color={useColor("foreground")} />
 				</Dropdown.Trigger>
 
 				{error && <Text className="text-sm text-danger">{error}</Text>}
@@ -195,13 +193,7 @@ const SelectItem = memo(
 					<Text className="text-sm text-foreground">{label}</Text>
 					{icon}
 				</View>
-				{isActive && (
-					<Iconify
-						icon="lucide:check"
-						size={16}
-						color={tw.color("foreground")}
-					/>
-				)}
+				{isActive && <CheckIcon size={16} color={useColor("foreground")} />}
 			</Dropdown.Item>
 		);
 	}

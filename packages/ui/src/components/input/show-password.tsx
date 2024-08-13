@@ -1,5 +1,5 @@
-import { Pressable, useTw } from "@nativetail/core";
-import { Iconify } from "react-native-iconify";
+import { Pressable, useColor } from "@nativetail/core";
+import { Eye, EyeOff } from "lucide-react-native";
 
 export default function ShowPassword({
 	showPassword,
@@ -8,24 +8,15 @@ export default function ShowPassword({
 	showPassword: boolean;
 	setShowPassword: (showPassword: boolean) => void;
 }) {
-	const tw = useTw();
 	return (
 		<Pressable
 			onPress={() => setShowPassword(!showPassword)}
 			className="absolute right-2 bottom-2"
 		>
 			{showPassword ? (
-				<Iconify
-					icon="solar:eye-linear"
-					size={20}
-					color={tw.color("foreground")}
-				/>
+				<Eye size={20} color={useColor("foreground")} />
 			) : (
-				<Iconify
-					icon="solar:eye-closed-linear"
-					size={20}
-					color={tw.color("foreground")}
-				/>
+				<EyeOff size={20} color={useColor("foreground")} />
 			)}
 		</Pressable>
 	);

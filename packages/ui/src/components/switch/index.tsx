@@ -8,7 +8,7 @@ import {
 } from "@nativetail/core";
 
 const switchVariants = cva(
-	"rounded-full bg-card justify-center border p-0.5 items-start",
+	"rounded-full bg-card justify-center border border-muted/15 p-0.5 items-start",
 	{
 		variants: {
 			size: {

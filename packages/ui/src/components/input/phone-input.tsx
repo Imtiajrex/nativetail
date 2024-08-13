@@ -8,6 +8,7 @@ import { Input, InputProps } from "./input";
 
 import { countries, ICountry } from "countries-list";
 import { FloatingInput } from "./floating-input";
+import { ChevronDown } from "lucide-react-native";
 type CountryType = ICountry & {
 	code: string;
 };
@@ -97,7 +98,7 @@ const SelectCountry = ({
 				<Text>
 					<Text className="mr-1">{flag}</Text>+{selectedCountry.phone?.[0]}
 				</Text>
-				<Iconify icon="mingcute:down-line" size={24} color="gray" />
+				<ChevronDown size={24} color="gray" />
 			</Pressable>
 			<CountryBottomSheet
 				selectedCountry={selectedCountry}

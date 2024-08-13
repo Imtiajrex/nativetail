@@ -1,6 +1,6 @@
-import { TextInput, View, cn, useTw } from "@nativetail/core";
+import { TextInput, View, cn, useColor, useTw } from "@nativetail/core";
+import { Minus, Plus } from "lucide-react-native";
 import { useCallback, useRef } from "react";
-import { Iconify } from "react-native-iconify";
 import { Button } from "../button";
 export type CounterProps = {
 	value: number;
@@ -48,11 +48,7 @@ export function Counter({
 			)}
 		>
 			<CounterButton disabled={!!(min && value <= min)} onPress={decrement}>
-				<Iconify
-					icon="ic:round-minus"
-					size={15}
-					color={tw.color("foreground")}
-				/>
+				<Minus size={15} color={useColor("foreground")} />
 			</CounterButton>
 			<View className="flex-1 h-full">
 				<TextInput
@@ -62,11 +58,7 @@ export function Counter({
 				/>
 			</View>
 			<CounterButton disabled={!!(max && value >= max)} onPress={increment}>
-				<Iconify
-					icon="ic:round-plus"
-					size={15}
-					color={tw.color("foreground")}
-				/>
+				<Plus size={15} color={useColor("foreground")} />
 			</CounterButton>
 		</View>
 	);

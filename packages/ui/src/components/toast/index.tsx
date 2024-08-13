@@ -1,4 +1,11 @@
-import { cn, Pressable, Text, useTw, View } from "@nativetail/core";
+import { cn, Pressable, Text, useColor, useTw, View } from "@nativetail/core";
+import {
+	CheckCheck,
+	Info,
+	OctagonAlert,
+	OctagonX,
+	X,
+} from "lucide-react-native";
 import { AnimatePresence } from "moti";
 import { useCallback, useEffect, useState } from "react";
 import { Modal } from "react-native";
@@ -140,30 +147,10 @@ const BaseToast = (
 	}, [toast.id]);
 
 	const Icons = {
-		success: (
-			<Iconify
-				icon="lets-icons:check-fill"
-				size={20}
-				color={tw.color("success")}
-			/>
-		),
-		danger: (
-			<Iconify icon="uis:times-circle" size={20} color={tw.color("danger")} />
-		),
-		info: (
-			<Iconify
-				icon="fluent:info-16-filled"
-				size={20}
-				color={tw.color("info")}
-			/>
-		),
-		warning: (
-			<Iconify
-				icon="fluent:warning-16-filled"
-				size={20}
-				color={tw.color("warning")}
-			/>
-		),
+		success: <CheckCheck size={20} color={useColor("success")} />,
+		danger: <OctagonX size={20} color={useColor("danger")} />,
+		info: <Info size={20} color={useColor("info")} />,
+		warning: <OctagonAlert size={20} color={useColor("warning")} />,
 	};
 
 	const Icon = toast.icon || Icons[toast.type];

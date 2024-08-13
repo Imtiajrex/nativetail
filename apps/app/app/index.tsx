@@ -36,6 +36,10 @@ const components = [
 		link: "/Check",
 	},
 	{
+		name: "Card",
+		link: "/Card",
+	},
+	{
 		name: "Chips",
 		link: "/Chips",
 	},

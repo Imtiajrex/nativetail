@@ -15,3 +15,5 @@ export * from "./counter";
 export * from "./tabs";
 export * from "./form-builder";
 export * from "./check";
+export * from "./card";
+export * from "./indicator";

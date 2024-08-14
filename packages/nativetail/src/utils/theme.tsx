@@ -1,17 +1,20 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import {
-	Appearance,
-	useColorScheme as useNativeColorScheme,
-} from "react-native";
-import { TailwindFn, TwConfig, create } from "../parser";
+import { Appearance } from "react-native";
+import { TailwindFn, TwConfig, create, useAppColorScheme } from "../parser";
 type ColorSchemeType = "light" | "dark";
 
+type FontsResourceType = Record<string, Record<string, string>>;
 type ContextType = {
 	tw: TailwindFn | null;
 	theme: any | null;
 	setTheme: (theme: any) => void;
 	colorScheme: ColorSchemeType;
 	setColorScheme: (colorScheme: ColorSchemeType) => void;
+	fonts?: FontsResourceType;
+	defaultFont?: {
+		name: string;
+		weight: number;
+	};
 };
 
 export const ThemeContext = createContext<ContextType>({
@@ -26,26 +29,38 @@ export const ThemeProvider = ({
 	children,
 	theme,
 	defaultColorScheme,
+	fonts,
+	defaultFont,
 }: {
 	children: any;
 	theme: TwConfig;
 	defaultColorScheme?: ColorSchemeType;
+	defaultFont?: {
+		name: string;
+		weight: number;
+	};
+	fonts?: FontsResourceType;
 }) => {
+	const tw = useRef(create(theme));
+	const [appColorScheme, _, setAppColorScheme] = useAppColorScheme(tw.current);
+
 	const [colorScheme, setColorScheme] = useState<ColorSchemeType>(
-		defaultColorScheme || useNativeColorScheme()
+		defaultColorScheme || appColorScheme
 	);
 
-	const tw = useRef(create(theme));
 	useEffect(() => {
 		if ("setColorScheme" in Appearance) {
 			Appearance.setColorScheme(colorScheme);
 		}
+		setAppColorScheme(colorScheme);
 	}, [colorScheme]);
 	return (
 		<ThemeContext.Provider
 			value={{
 				tw: tw.current,
+				fonts,
 				theme,
+				defaultFont,
 				setTheme: (theme) => {
 					// setTw(create(theme));
 					tw.current = create(theme);

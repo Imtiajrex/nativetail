@@ -85,9 +85,10 @@ export type ButtonProps = MotiPressableProps &
 const Button = (passedProps: ButtonProps) => {
 	const componentTheme = useComponentTheme();
 	const buttonProps = componentTheme?.Button || {};
-	const {
+	let {
 		text,
 		children,
+
 		isLoading,
 		disabled,
 		variant,
@@ -102,6 +103,7 @@ const Button = (passedProps: ButtonProps) => {
 		...buttonProps,
 		...passedProps,
 	};
+	children = children || text;
 	const tw = useTw();
 	const className = cn(buttonProps.className, passedProps.className);
 

@@ -1,4 +1,4 @@
-import { Text, useColor, View } from "@nativetail/core";
+import { Image, Text, useColor, View } from "@nativetail/core";
 import {
 	AlertDialog,
 	AlertDialogRef,
@@ -143,7 +143,26 @@ const Data = () => {
 	return (
 		<View className="gap-2">
 			<Text className="text-lg font-semibold text-foreground">Data</Text>
-			<Card />
+			<Card
+				renderHeader={() => (
+					<Image
+						source={{
+							uri: "https://th.bing.com/th/id/R.cf82888eb3ca6b81c0bb4a1ccf78292f?rik=YrrNGXJeiW5uXQ&pid=ImgRaw&r=0",
+						}}
+						className="w-full h-40 rounded-xl"
+					/>
+				)}
+				containerClassName="max-w-72"
+				title="BMW M4"
+				subtitle="2021"
+				description="BMW's motorsport division, BMW M."
+				buttonProps={{
+					text: "View",
+					className: "w-full mt-3",
+					variant: "outline",
+				}}
+				onPress={() => {}}
+			/>
 		</View>
 	);
 };

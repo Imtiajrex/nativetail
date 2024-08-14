@@ -10,6 +10,8 @@ import {
 type InfoCardProps = {
 	containerClassname?: string;
 	renderIcon?: () => React.ReactNode;
+	renderContent?: () => React.ReactNode;
+	contentClassName?: string;
 	title?: string;
 	subtitle?: string;
 	titleClassname?: string;
@@ -20,11 +22,11 @@ type InfoCardProps = {
 	renderRight?: () => React.ReactNode;
 	onPress?: () => void;
 	dotsClassname?: string;
+	textContentClassname?: string;
 };
 export function InfoCard({
 	containerClassname,
 	renderIcon,
-	renderRight,
 	subtitle,
 	title,
 	titleClassname,
@@ -34,33 +36,18 @@ export function InfoCard({
 	actions,
 	onPress,
 	dotsClassname,
+	contentClassName,
+	textContentClassname,
+	...props
 }: InfoCardProps) {
 	const actionSheetRef = useRef<ActionSheetRef>(null);
-	return (
-		<Pressable
-			className={cn(
-				"flex-row items-center w-full justify-between p-3 rounded-xl bg-card",
-				containerClassname
-			)}
-			disabled={!onPress}
-		>
-			<View className="flex-row items-center gap-2">
-				{renderIcon && renderIcon()}
-				<View className="">
-					<Text className={cn("text-sm font-medium", titleClassname)}>
-						{title}
-					</Text>
-					<Text className={cn("text-[13px] text-muted", subtitleClassName)}>
-						{subtitle}
-					</Text>
-					<Text className={cn("text-xs text-muted/65", descriptionClassName)}>
-						{description}
-					</Text>
-				</View>
-			</View>
-			<View className="flex-row gap-1">
-				{renderRight && renderRight()}
-				{actions && (
+	const renderRight = () => {
+		if (props.renderRight) {
+			return props.renderRight();
+		}
+		if (actions)
+			return (
+				<View className="flex-row gap-1">
 					<>
 						<Pressable
 							className={cn(
@@ -87,8 +74,40 @@ export function InfoCard({
 							ref={actionSheetRef}
 						/>
 					</>
-				)}
+				</View>
+			);
+	};
+	const renderContent = () => {
+		if (props.renderContent) {
+			return props.renderContent();
+		}
+		return (
+			<View className={textContentClassname}>
+				<Text className={cn("text-sm font-medium", titleClassname)}>
+					{title}
+				</Text>
+				<Text className={cn("text-[13px] text-muted", subtitleClassName)}>
+					{subtitle}
+				</Text>
+				<Text className={cn("text-xs text-muted/65", descriptionClassName)}>
+					{description}
+				</Text>
 			</View>
+		);
+	};
+	return (
+		<Pressable
+			className={cn(
+				"flex-row items-center w-full justify-between ",
+				containerClassname
+			)}
+			disabled={!onPress}
+		>
+			<View className={cn("flex-row gap-2 items-center p-2", contentClassName)}>
+				{renderIcon && renderIcon()}
+				{renderContent()}
+			</View>
+			{renderRight()}
 		</Pressable>
 	);
 }

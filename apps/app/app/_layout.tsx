@@ -14,6 +14,13 @@ import { onlineManager, QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 
 import NetInfo from "@react-native-community/netinfo";
+import {
+	useFonts,
+	Roboto_400Regular,
+	Roboto_500Medium,
+	Roboto_700Bold,
+	Roboto_300Light,
+} from "@expo-google-fonts/roboto";
 
 onlineManager.setEventListener((setOnline) => {
 	return NetInfo.addEventListener((state) => {
@@ -36,6 +43,16 @@ export default function _layout() {
 	useEffect(() => {
 		SplashScreen.hideAsync();
 	}, []);
+
+	let [fontsLoaded] = useFonts({
+		Roboto_400Regular,
+		Roboto_500Medium,
+		Roboto_700Bold,
+		Roboto_300Light,
+	});
+	if (!fontsLoaded) {
+		return null;
+	}
 	return (
 		<>
 			<GestureHandlerRootView style={{ flex: 1 }}>
@@ -44,7 +61,21 @@ export default function _layout() {
 						client={queryClient}
 						persistOptions={{ persister: asyncStoragePersister }}
 					>
-						<ThemeProvider theme={require("../tailwind.config.js")}>
+						<ThemeProvider
+							theme={require("../tailwind.config.js")}
+							fonts={{
+								roboto: {
+									"300": "Roboto_300Light",
+									"400": "Roboto_400Regular",
+									"500": "Roboto_500Medium",
+									"700": "Roboto_700Bold",
+								},
+							}}
+							defaultFont={{
+								name: "roboto",
+								weight: 400,
+							}}
+						>
 							<ComponentThemeProvider
 								components={{
 									Button: {

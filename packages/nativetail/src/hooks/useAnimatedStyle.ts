@@ -9,7 +9,7 @@ import {
 	useDerivedValue,
 	useSharedValue,
 } from "react-native-reanimated";
-import { useTw } from "../utils/theme";
+import { useThemeContext, useTw } from "../utils/theme";
 import { separateClasses } from "../utils/tw";
 import { mergeClasses } from "../utils/utils";
 import useTransition from "./useTransition";
@@ -81,9 +81,11 @@ export const useAnimatedStyle = <T extends ViewStyle | TextStyle>({
 		() => tw`${outClasses}`,
 		[outClasses, tw, tw.memoBuster]
 	);
+
+	const fontStyle = useFontStyle(className);
 	const newStyle = useMemo(
-		() => [tw`${nonAnimatableClasses}`, style ?? {}],
-		[nonAnimatableClasses, style, tw, tw.memoBuster]
+		() => [tw`${nonAnimatableClasses}`, fontStyle, style ?? {}],
+		[nonAnimatableClasses, style, tw, tw.memoBuster, fontStyle]
 	);
 
 	return {
@@ -118,8 +120,9 @@ export function usePlainStyle({ className = "", style, isText }) {
 		() => separateClasses(mergeClasses(baseClass, className), isText),
 		[className, isText, baseClass]
 	);
+	const fontStyle = useFontStyle(className);
 	const newStyle = useMemo(
-		() => [tw?.style?.(textClasses, className), style ?? {}],
+		() => [tw?.style?.(textClasses, className), fontStyle, style ?? {}],
 		[className, style, tw, tw.memoBuster]
 	);
 	return {
@@ -127,6 +130,61 @@ export function usePlainStyle({ className = "", style, isText }) {
 		textClasses,
 	};
 }
+const fontWeightClasses = {
+	thin: 100,
+	extralight: 200,
+	light: 300,
+	normal: 400,
+	medium: 500,
+	semibold: 600,
+	bold: 700,
+	extrabold: 800,
+	black: 900,
+};
+const useFontStyle = (
+	className: string
+):
+	| {
+			fontFamily: string;
+			fontWeight: number;
+	  }
+	| {} => {
+	const fonts = useThemeContext().fonts;
+
+	const fontClasses = className
+		.split(" ")
+		.filter((c) => c.startsWith("font-"))
+		.map((c) => c.replace("font-", ""));
+
+	const fontWeightString = fontClasses.find((c) =>
+		Object.keys(fontWeightClasses).includes(c)
+	);
+	let fontWeight: number = fontWeightClasses[fontWeightString];
+	if (
+		fontClasses.length > 0 &&
+		fontClasses.some((c) => Object.keys(fonts).includes(c))
+	) {
+		const fontKey = fontClasses.find((c) => Object.keys(fonts).includes(c));
+		const classFont = fonts?.[fontKey];
+		if (classFont) {
+			const fontFamily = classFont[fontWeight];
+			return {
+				fontFamily,
+				fontWeight,
+			};
+		}
+	}
+	const defaultFont = useThemeContext().defaultFont;
+	if (!defaultFont) {
+		return {};
+	}
+	fontWeight = fontWeight || defaultFont.weight;
+	const font = fonts?.[defaultFont.name]?.[fontWeight];
+	if (!font) {
+		return {};
+	}
+	return { fontFamily: font, fontWeight: fontWeight };
+};
 export function useGroupedAnimatedStyle<T extends ViewStyle | TextStyle>({
 	className = "",
 	style,

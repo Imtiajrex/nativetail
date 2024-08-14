@@ -102,6 +102,7 @@ export function InfoCard({
 				containerClassname
 			)}
 			disabled={!onPress}
+			onPress={onPress}
 		>
 			<View className={cn("flex-row gap-2 items-center p-2", contentClassName)}>
 				{renderIcon && renderIcon()}

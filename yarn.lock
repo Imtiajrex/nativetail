@@ -2427,10 +2427,10 @@
     component-type "^1.2.1"
     join-component "^1.1.0"
 
-"@shopify/flash-list@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@shopify/flash-list/-/flash-list-1.7.0.tgz#a18fa09ccd521349e60f176eaf190ff30d24d597"
-  integrity sha512-Uys8mWTb0Y34Ts1hD97KrVFbFH9oY7qbj/u1oSrAS5PJAackDFbndUEVuTYyXSyWxHY0sRutF5HgS1yNdhj+0A==
+"@shopify/flash-list@^1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@shopify/flash-list/-/flash-list-1.7.1.tgz#11644551d86b8a9ef83f521487bebba478bfc011"
+  integrity sha512-sUYl7h8ydJutufA26E42Hj7cLvaBTpkMIyNJiFrxUspkcANb6jnFiLt9rEwAuDjvGk/C0lHau+WyT6ZOxqVPwg==
   dependencies:
     recyclerlistview "4.2.1"
     tslib "2.6.3"

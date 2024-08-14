@@ -1,14 +1,13 @@
 import { cn, Pressable, Text, View } from "@nativetail/core";
 import { memo, useCallback, useMemo, useRef, useState } from "react";
 import { Controller } from "react-hook-form";
-import { FlashList, FlatList } from "react-native-actions-sheet";
-import { Iconify } from "react-native-iconify";
+import { FlashList } from "react-native-actions-sheet";
 import { BottomSheet, BottomSheetRef } from "../bottom-sheet";
 import { Input, InputProps } from "./input";
 
 import { countries, ICountry } from "countries-list";
-import { FloatingInput } from "./floating-input";
 import { ChevronDown } from "lucide-react-native";
+import { FloatingInput } from "./floating-input";
 type CountryType = ICountry & {
 	code: string;
 };

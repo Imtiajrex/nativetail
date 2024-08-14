@@ -150,6 +150,7 @@ const useFontStyle = (
 	  }
 	| {} => {
 	const fonts = useThemeContext().fonts;
+	if (!fonts) return {};
 
 	const fontClasses = className
 		.split(" ")

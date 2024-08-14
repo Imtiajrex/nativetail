@@ -11,7 +11,7 @@ export default function ShowPassword({
 	return (
 		<Pressable
 			onPress={() => setShowPassword(!showPassword)}
-			className="absolute right-2 bottom-2"
+			className="absolute right-0 bottom-0 items-center justify-center h-full p-2"
 		>
 			{showPassword ? (
 				<Eye size={20} color={useColor("foreground")} />

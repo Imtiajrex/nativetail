@@ -37,6 +37,7 @@ export type FormBuilderProps<
 	onError?: (values: Partial<Record<keyof T, any>>) => void;
 	isSubmitting?: boolean;
 	defaultValues?: DefaultValues<IValues>;
+	inputContainerClassname?: string;
 };
 export function FormBuilder<T extends z.ZodRawShape>({
 	schema,
@@ -47,6 +48,7 @@ export function FormBuilder<T extends z.ZodRawShape>({
 	onError,
 	isSubmitting,
 	defaultValues,
+	inputContainerClassname,
 }: FormBuilderProps<T>) {
 	const shape = schema.shape;
 	const keys = Object.keys(shape);
@@ -56,22 +58,31 @@ export function FormBuilder<T extends z.ZodRawShape>({
 		defaultValues: defaultValues,
 	});
 	return (
-		<View className={cn("gap-2", containerClassname)}>
-			{keys.map((inputKey) => {
-				const Input = inputs[inputKey];
-				const Render = Input.render;
-				if (!Render) {
+		<View className={cn("gap-4", containerClassname)}>
+			<View className={cn("flex-1 gap-2", inputContainerClassname)}>
+				{keys.map((inputKey) => {
+					const Input = inputs[inputKey] || {
+						type: "text",
+						props: {
+							placeholder: inputKey,
+						},
+					};
+					const Render = Input.render;
+					if (!Render) {
+						return (
+							<InputComponent
+								control={form.control}
+								name={inputKey}
+								{...Input}
+								key={inputKey}
+							/>
+						);
+					}
 					return (
-						<InputComponent
-							control={form.control}
-							name={inputKey}
-							{...Input}
-							key={inputKey}
-						/>
+						<Render control={form.control} name={inputKey} key={inputKey} />
 					);
-				}
-				return <Render control={form.control} name={inputKey} key={inputKey} />;
-			})}
+				})}
+			</View>
 			<Button
 				className="w-full"
 				children={"Submit"}
@@ -110,27 +121,27 @@ const InputComponent = ({
 
 type TextInputType = {
 	type: "text";
-	props: InputProps;
+	props?: InputProps;
 };
 type FloatingInputType = {
 	type: "floating";
-	props: FloatingInputProps;
+	props?: FloatingInputProps;
 };
 type SelectInputType = {
 	type: "select";
-	props: SelectProps;
+	props?: SelectProps;
 };
 type MultiSelectInputType = {
 	type: "multi-select";
-	props: MultiSelectProps;
+	props?: MultiSelectProps;
 };
 type PinInputType = {
 	type: "pin";
-	props: PinInputProps;
+	props?: PinInputProps;
 };
 type PhoneInputType = {
 	type: "phone";
-	props: TextInputProps;
+	props?: TextInputProps;
 };
 type InputType =
 	| TextInputType

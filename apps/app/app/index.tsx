@@ -76,6 +76,14 @@ const components = [
 		link: "/Dialog",
 	},
 	{
+		name: "Stepper",
+		link: "/Stepper",
+	},
+	{
+		name: "Multi Step Form",
+		link: "/Multi-Step-Form",
+	},
+	{
 		name: "Form",
 		link: "/Form",
 	},

@@ -133,18 +133,18 @@ const BaseInput = <T extends Record<string, any>>({
 					</Pressable>
 				)}
 
+				{isSecretToggleable && (
+					<ShowPassword
+						showPassword={showPassword}
+						setShowPassword={setShowPassword}
+					/>
+				)}
+
 				{rightElement}
 			</View>
 			{helperText && <Text className="text-muted text-sm">{helperText}</Text>}
 
 			{error && <Text className="text-danger text-sm">{error}</Text>}
-
-			{isSecretToggleable && (
-				<ShowPassword
-					showPassword={showPassword}
-					setShowPassword={setShowPassword}
-				/>
-			)}
 		</View>
 	);
 };

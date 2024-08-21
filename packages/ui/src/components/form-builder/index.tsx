@@ -61,13 +61,9 @@ export function FormBuilder<T extends z.ZodRawShape>({
 		<View className={cn("gap-4", containerClassname)}>
 			<View className={cn("flex-1 gap-2", inputContainerClassname)}>
 				{keys.map((inputKey) => {
-					const Input = inputs[inputKey] || {
-						type: "text",
-						props: {
-							placeholder: inputKey,
-						},
-					};
+					const Input = inputs[inputKey];
 					const Render = Input.render;
+					if (!Input) return null;
 					if (!Render) {
 						return (
 							<InputComponent

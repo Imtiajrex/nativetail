@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { typeboxResolver } from "@hookform/resolvers/typebox";
 import { Text, View } from "@nativetail/core";
 import {
 	Button,
@@ -14,6 +15,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { sleep } from "utils/sleep";
 import { z } from "zod";
+import { Type as t } from "@sinclair/typebox";
+
 export default function Page() {
 	return (
 		<View className="container">
@@ -23,6 +26,24 @@ export default function Page() {
 }
 
 const FormDemo = () => {
+	const typeboxSchema = t.Object({
+		name: t.String(),
+		email: t.String(),
+		pin: t.String(),
+		ageGroup: t.Enum({
+			1: "1",
+			2: "2",
+			3: "3",
+		}),
+		skills: t.Array(
+			t.Enum({
+				1: "1",
+				2: "2",
+				3: "3",
+			})
+		),
+		phone: t.Optional(t.String()),
+	});
 	const schema = z.object({
 		name: z.string().min(2).max(10),
 		email: z.string().email(),
@@ -33,7 +54,7 @@ const FormDemo = () => {
 	});
 	type FormSchema = z.infer<typeof schema>;
 	const { control, handleSubmit, reset } = useForm<FormSchema>({
-		resolver: zodResolver(schema),
+		resolver: typeboxResolver(typeboxSchema),
 		reValidateMode: "onChange",
 		defaultValues: {
 			name: "",

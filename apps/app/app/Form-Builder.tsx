@@ -95,7 +95,7 @@ export default function FormBuilderDemo() {
 						},
 					},
 				}}
-				onSubmit={submit.mutate}
+				onSubmit={(values) => submit.mutate(values)}
 				onError={(errors) => {
 					console.log(errors);
 					showToast({

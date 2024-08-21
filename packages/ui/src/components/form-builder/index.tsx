@@ -33,7 +33,7 @@ export type FormBuilderProps<
 	>;
 	containerClassname?: string;
 	submitButtonProps?: ComponentPropsWithoutRef<typeof Button>;
-	onSubmit?: (values: IValues) => void;
+	onSubmit?: (values: IValues, reset?: () => void) => void;
 	onError?: (values: Partial<Record<keyof T, any>>) => void;
 	isSubmitting?: boolean;
 	defaultValues?: DefaultValues<IValues>;
@@ -83,7 +83,9 @@ export function FormBuilder<T extends z.ZodRawShape>({
 				className="w-full"
 				children={"Submit"}
 				{...submitButtonProps}
-				onPress={form.handleSubmit(onSubmit, onError)}
+				onPress={form.handleSubmit((data) => {
+					onSubmit?.(data, form.reset);
+				}, onError)}
 				isLoading={isSubmitting}
 			/>
 		</View>

@@ -32,7 +32,7 @@ type ZodFormBuilderProps<
 	schema: T;
 	inputs?: Partial<
 		Record<
-			keyof T,
+			keyof IValues,
 			{
 				render?: (props: {
 					control: Control<IValues, any>;

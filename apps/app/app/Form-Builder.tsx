@@ -55,7 +55,7 @@ export default function FormBuilderDemo() {
 		<View className="gap-2 m-4 container  rounded-2xl border bg-card border-muted/15 ">
 			<Text className=" text-xl">Form Builder Demo</Text>
 			<FormBuilder
-				schema={typeboxSchema}
+				schema={schema}
 				inputs={{
 					name: {
 						type: "text",

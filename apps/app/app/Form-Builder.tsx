@@ -3,6 +3,7 @@ import { Button, FormBuilder, showToast } from "@nativetail/ui";
 import { useMutation } from "@tanstack/react-query";
 import { sleep } from "utils/sleep";
 import { z } from "zod";
+import { Static, Type as t } from "@sinclair/typebox";
 export default function FormBuilderDemo() {
 	const schema = z.object({
 		name: z.string().min(2).max(10),
@@ -12,7 +13,25 @@ export default function FormBuilderDemo() {
 		skills: z.array(z.enum(["1", "2", "3"])),
 		phone: z.string().length(10).optional(),
 	});
-	type FormSchema = z.infer<typeof schema>;
+	const typeboxSchema = t.Object({
+		name: t.String(),
+		email: t.String(),
+		pin: t.String(),
+		ageGroup: t.Enum({
+			1: "1",
+			2: "2",
+			3: "3",
+		}),
+		skills: t.Array(
+			t.Enum({
+				1: "1",
+				2: "2",
+				3: "3",
+			})
+		),
+		phone: t.Optional(t.String()),
+	});
+	type FormSchema = Static<typeof typeboxSchema>;
 	const submit = useMutation({
 		mutationFn: async (values: FormSchema) => {
 			await sleep(1500);
@@ -36,7 +55,7 @@ export default function FormBuilderDemo() {
 		<View className="gap-2 m-4 container  rounded-2xl border bg-card border-muted/15 ">
 			<Text className=" text-xl">Form Builder Demo</Text>
 			<FormBuilder
-				schema={schema}
+				schema={typeboxSchema}
 				inputs={{
 					name: {
 						type: "text",

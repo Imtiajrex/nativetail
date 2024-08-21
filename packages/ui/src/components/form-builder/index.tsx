@@ -36,7 +36,7 @@ type ZodFormBuilderProps<
 			{
 				render?: (props: {
 					control: Control<IValues, any>;
-					name: keyof T;
+					name: keyof IValues;
 				}) => React.ReactElement;
 			} & InputType
 		>

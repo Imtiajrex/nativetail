@@ -1,9 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { typeboxResolver } from "@hookform/resolvers/typebox";
 
 import { cn, TextInputProps, View } from "@nativetail/core";
 import React, { ComponentPropsWithoutRef } from "react";
-import { Control, DefaultValues, FieldValues, useForm } from "react-hook-form";
+import { Control, DefaultValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "../button";
 import {
@@ -16,16 +15,8 @@ import {
 	PinInputProps,
 } from "../input";
 import { MultiSelect, MultiSelectProps, Select, SelectProps } from "../select";
-import {
-	Type,
-	TSchema,
-	Static,
-	JavaScriptTypeBuilder,
-	TObject,
-	TProperties,
-} from "@sinclair/typebox";
 
-type ZodFormBuilderProps<
+export type FormBuilderProps<
 	T extends z.ZodObject<z.ZodRawShape>,
 	IValues = z.infer<T>,
 > = {
@@ -44,46 +35,13 @@ type ZodFormBuilderProps<
 	containerClassname?: string;
 	submitButtonProps?: ComponentPropsWithoutRef<typeof Button>;
 	onSubmit?: (values: IValues, reset?: () => void) => void;
-	onError?: (values: Partial<Record<keyof T, any>>) => void;
-	isSubmitting?: boolean;
-	defaultValues?: DefaultValues<IValues>;
-	inputContainerClassname?: string;
-};
-type TypeboxFormBuilderProps<T extends TSchema, IValues = Static<T>> = {
-	schema: TSchema;
-	inputs?: Partial<
-		Record<
-			keyof IValues,
-			{
-				render?: (props: {
-					control: Control<IValues, any>;
-					name: string;
-				}) => React.ReactElement;
-			} & InputType
-		>
-	>;
-	containerClassname?: string;
-	submitButtonProps?: ComponentPropsWithoutRef<typeof Button>;
-	onSubmit?: (values: IValues, reset?: () => void) => void;
-	onError?: (values: Partial<Record<string, any>>) => void;
+	onError?: (values: Partial<Record<keyof IValues, any>>) => void;
 	isSubmitting?: boolean;
 	defaultValues?: DefaultValues<IValues>;
 	inputContainerClassname?: string;
 };
 
-export type FormBuilderProps<T extends z.ZodObject<z.ZodRawShape> | TSchema> =
-	T extends z.ZodObject<z.ZodRawShape>
-		? ZodFormBuilderProps<T>
-		: T extends TSchema
-			? TypeboxFormBuilderProps<T>
-			: never;
-const isTypebox = (shape: any): shape is TObject<TProperties> => {
-	return shape instanceof JavaScriptTypeBuilder;
-};
-const isZod = (shape: any): shape is z.ZodObject<z.ZodRawShape> => {
-	return shape instanceof z.ZodObject;
-};
-export function FormBuilder<T extends z.ZodObject<z.ZodRawShape> | TSchema>({
+export function FormBuilder<T extends z.ZodObject<z.ZodRawShape>>({
 	schema,
 	inputs,
 	containerClassname,
@@ -97,19 +55,9 @@ export function FormBuilder<T extends z.ZodObject<z.ZodRawShape> | TSchema>({
 	const shape = schema.shape;
 	const keys = Object.keys(shape);
 
-	type SchemaType = typeof schema;
-	type FormSchemaType =
-		SchemaType extends z.ZodObject<z.ZodRawShape>
-			? z.infer<SchemaType>
-			: SchemaType extends TSchema
-				? Static<SchemaType>
-				: any;
+	type FormSchemaType = z.infer<T>;
 	const form = useForm<FormSchemaType>({
-		resolver: isTypebox(schema)
-			? typeboxResolver(schema)
-			: isZod(schema)
-				? zodResolver(schema)
-				: undefined,
+		resolver: zodResolver(schema),
 		defaultValues: defaultValues,
 	});
 	return (
@@ -138,9 +86,12 @@ export function FormBuilder<T extends z.ZodObject<z.ZodRawShape> | TSchema>({
 				className="w-full"
 				children={"Submit"}
 				{...submitButtonProps}
-				onPress={form.handleSubmit((data) => {
-					onSubmit?.(data, form.reset);
-				}, onError)}
+				onPress={form.handleSubmit(
+					(data) => {
+						onSubmit?.(data, form.reset);
+					},
+					(error) => onError?.(error)
+				)}
 				isLoading={isSubmitting}
 			/>
 		</View>

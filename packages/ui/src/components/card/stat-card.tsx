@@ -1,6 +1,6 @@
 import { cn, View } from "@nativetail/core";
 
-type StatCardProps = {
+export type StatCardProps = {
 	renderIcon?: () => React.ReactNode;
 	renderTitle?: () => React.ReactNode;
 	renderValue?: () => React.ReactNode;

@@ -7,7 +7,7 @@ import {
 	ActionSheetRef,
 } from "../actions-sheet";
 
-type InfoCardProps = {
+export type InfoCardProps = {
 	containerClassname?: string;
 	renderIcon?: () => React.ReactNode;
 	renderContent?: () => React.ReactNode;

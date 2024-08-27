@@ -2,7 +2,7 @@ import { cn, Text, useTw, View } from "@nativetail/core";
 import { Pressable } from "react-native";
 import { Button, ButtonProps } from "../button";
 
-type CardProps = {
+export type CardProps = {
 	renderHeader?: () => React.ReactNode;
 	title?: string;
 	subtitle?: string;

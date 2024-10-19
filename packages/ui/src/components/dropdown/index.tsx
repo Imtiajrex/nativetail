@@ -223,11 +223,14 @@ const DropdownMenu = ({
 	}, [isOpen]);
 	const renderChildren = useCallback(() => {
 		return React.Children.map(children, (child, index) => {
-			return React.cloneElement(child as any, {
-				key: index,
-				last: index === React.Children.count(children) - 1,
-				first: index === 0,
-			});
+			return (
+				child &&
+				React.cloneElement(child as any, {
+					key: index,
+					last: index === React.Children.count(children) - 1,
+					first: index === 0,
+				})
+			);
 		});
 	}, [children]);
 	return (

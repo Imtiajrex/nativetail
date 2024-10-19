@@ -37,7 +37,7 @@ type DropdownState = {
 	toggle: () => void;
 	close: () => void;
 	open: () => void;
-	position: PositionType | null;
+	position: React.MutableRefObject<PositionType | null>;
 	setPosition: (position: PositionType | null) => void;
 };
 const DropdownContext = React.createContext<DropdownState | null>(null);
@@ -57,7 +57,7 @@ const DropdownRoot = ({
 	children: ReactNode;
 }) => {
 	const [open, setOpen] = useState(false);
-	const [position, setPosition] = useState<PositionType | null>(null);
+	const position = useRef<PositionType | null>(null);
 	return (
 		<DropdownContext.Provider
 			value={{
@@ -66,7 +66,9 @@ const DropdownRoot = ({
 				close: () => setOpen(false),
 				open: () => setOpen(true),
 				position,
-				setPosition,
+				setPosition: (pos) => {
+					position.current = pos;
+				},
 			}}
 		>
 			<View className={className} animated>
@@ -118,6 +120,11 @@ const DropdownTrigger = ({
 		}
 		toggle();
 	}, [toggle, _measure]);
+
+	useEffect(() => {
+		_measure();
+	}, [_measure]);
+
 	return (
 		<Pressable
 			className={className}
@@ -141,28 +148,57 @@ const DropdownMenu = ({
 	useBlur?: boolean;
 }) => {
 	const { isOpen, close } = useDropdownContext();
-	const position = useDropdownContext().position;
+	const position = useDropdownContext().position.current;
+
+	const [modalOpen, setModalOpen] = useState(isOpen);
+	const [layout, setLayout] = useState<PositionType>({
+		bottom: 0,
+		height: 0,
+		left: 0,
+		right: 0,
+		top: 0,
+		width: 0,
+	});
+	const itemRef = useRef<NativeView>(null);
+	const screen = useWindowDimensions();
+	const tw = useTw();
 	const left = position?.left || 0;
 	const top = position?.top || 0;
 	const menuX = left;
-	const menuY = top;
 	const width = position?.width || 0;
-	const screen = useWindowDimensions();
-	const tw = useTw();
 	const style = tw`${className}`;
 	const styleWidth = !isNaN(Number(style?.width)) ? Number(style?.width) : 0;
 	const menuWidth = styleWidth || width || 0;
-	const isEndOfScreen = screen.width - menuX < menuWidth;
+	const isEndOfXScreen = screen.width - menuX < menuWidth;
+	const isEndOfYScreen = top + layout.height > screen.height;
 	const menuStyle: ViewStyle = {
-		top: menuY,
 		left: menuX,
 		transformOrigin: "top left",
 	};
-	if (isEndOfScreen) {
+	menuStyle.top = top;
+
+	if (isEndOfXScreen) {
 		menuStyle.left = menuX - menuWidth + width;
 		menuStyle.transformOrigin = "top right";
 	}
-	const [modalOpen, setModalOpen] = useState(isOpen);
+	if (isEndOfYScreen) {
+		menuStyle.top = top - layout.height - position.height;
+		menuStyle.transformOrigin = "bottom left";
+	}
+	const measureLayout = useCallback(() => {
+		if (itemRef.current) {
+			itemRef.current.measure((x, y, width, height, pageX, pageY) => {
+				setLayout({
+					width,
+					height,
+					top: pageY,
+					left: pageX,
+					right: screen.width - pageX - width,
+					bottom: screen.height - pageY - height,
+				});
+			});
+		}
+	}, []);
 
 	useEffect(() => {
 		if (isOpen) {
@@ -205,6 +241,7 @@ const DropdownMenu = ({
 				<AnimatePresence exitBeforeEnter>
 					{isOpen && (
 						<View
+							ref={itemRef}
 							className={mergeClasses(
 								"absolute in:scale-0 scale-100 out:scale-0 overflow-hidden z-10 bg-card/95 rounded-xl  border border-muted/15",
 								width ? `w-[${width}px]` : "",
@@ -212,6 +249,7 @@ const DropdownMenu = ({
 							)}
 							onDidAnimate={onDidAnimate}
 							style={menuStyle}
+							onLayout={measureLayout}
 							animated
 							print
 						>

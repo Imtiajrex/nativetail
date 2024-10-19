@@ -1,12 +1,41 @@
 import { View } from "@nativetail/core";
-import { MultiSelect, Select } from "@nativetail/ui";
-import { useState } from "react";
+import {
+	BottomSheet,
+	BottomSheetRef,
+	Button,
+	MultiSelect,
+	Select,
+} from "@nativetail/ui";
+import { useRef, useState } from "react";
 
 export default function Page() {
+	const sheetRef = useRef<BottomSheetRef>(null);
 	return (
 		<View className="container">
-			<SelectContent />
-			<MultiSelectDemo />
+			{/* <SelectContent />
+			<MultiSelectDemo /> */}
+
+			<Button
+				onPress={() => {
+					sheetRef.current?.show();
+				}}
+				variant={"outline"}
+				className="w-full"
+			>
+				Open Bottom Sheet
+			</Button>
+			<BottomSheet ref={sheetRef}>
+				<View className="p-4 max-w-4xl w-full mx-auto">
+					<MultiSelectDemo />
+					<Button
+						onPress={() => {
+							sheetRef.current?.hide();
+						}}
+					>
+						Close
+					</Button>
+				</View>
+			</BottomSheet>
 		</View>
 	);
 }

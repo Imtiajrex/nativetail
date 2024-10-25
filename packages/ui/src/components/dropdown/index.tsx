@@ -22,7 +22,6 @@ import {
 	useWindowDimensions,
 	ViewStyle,
 } from "react-native";
-import { Blur } from "../blur";
 
 type PositionType = {
 	width: number;
@@ -256,9 +255,6 @@ const DropdownMenu = ({
 							animated
 							print
 						>
-							{useBlur && (
-								<Blur style={tw`absolute top-0 left-0 rounded-xl flex-1 `} />
-							)}
 							{renderChildren()}
 						</View>
 					)}

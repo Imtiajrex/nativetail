@@ -1,6 +1,5 @@
 import { cn, useTw, View } from "@nativetail/core";
 import { forwardRef } from "react";
-import { Blur } from "../blur";
 import { Button } from "../button";
 import { Dialog, DialogMethods } from "../dialog";
 
@@ -43,11 +42,6 @@ export const ActionSheet = forwardRef<DialogMethods, ActionSheetProps>(
 				ref={ref}
 			>
 				<View className="w-full rounded-xl bg-card/95">
-					{useBlur && (
-						<Blur
-							style={tw`absolute top-0 flex-1 left-0 right-0 bottom-0 rounded-xl bg-card`}
-						/>
-					)}
 					{options?.map((action, index) => (
 						<ActionSheetItem
 							key={index}

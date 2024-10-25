@@ -1,6 +1,5 @@
-import { BlurView } from "expo-blur";
-import { AnimatePresence } from "moti";
 import { cn, mergeClasses, Pressable, useTw, View } from "@nativetail/core";
+import { AnimatePresence } from "moti";
 import {
 	forwardRef,
 	useCallback,
@@ -9,7 +8,6 @@ import {
 	useState,
 } from "react";
 import { Modal } from "react-native";
-import { Blur } from "../blur";
 
 export type DialogProps = {
 	containerClassName?: string;
@@ -107,12 +105,6 @@ export const Dialog = forwardRef<DialogMethods, DialogProps>(function Dialog(
 							)}
 							onDidAnimate={onDidAnimate}
 						>
-							{useBlur && (
-								<Blur
-									style={tw`absolute top-0 left-0 right-0 bottom-0 rounded-xl flex-1 bg-card`}
-								/>
-							)}
-
 							{children}
 						</View>
 					)}

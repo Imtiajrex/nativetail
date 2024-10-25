@@ -1,6 +1,6 @@
 {
 	"name": "@nativetail/ui",
-	"version": "0.2.7",
+	"version": "0.2.9",
 	"description": "",
 	"main": "src/index.ts",
 	"scripts": {},
@@ -30,7 +30,6 @@
 		"@nativetail/core": "^0.0.6",
 		"@shopify/flash-list": "^1.7.1",
 		"countries-list": "^3.1.0",
-		"expo-blur": "^13.0.2",
 		"expo-linear-gradient": "~13.0.2",
 		"lucide-react-native": "^0.427.0",
 		"moti": "^0.29.0",

@@ -1,6 +1,6 @@
 {
 	"name": "@nativetail/ui",
-	"version": "0.3.0",
+	"version": "0.3.4",
 	"description": "",
 	"main": "src/index.ts",
 	"scripts": {},
@@ -22,12 +22,9 @@
 		"type": "git",
 		"url": "https://github.com/Imtiajrex/nativetail.git"
 	},
-	"peerDependencies": {
-		"react-native": ">=0.63.0"
-	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.6.0",
-		"@nativetail/core": "^0.0.6",
+		"@nativetail/core": "^0.0.8",
 		"@shopify/flash-list": "^1.7.1",
 		"countries-list": "^3.1.0",
 		"expo-linear-gradient": "~13.0.2",
@@ -35,13 +32,13 @@
 		"moti": "^0.29.0",
 		"react": "18.2.0",
 		"react-hook-form": "^7.51.0",
-		"react-native": "0.73.6",
+		"react-native": "0.74.2",
 		"react-native-actions-sheet": "^0.9.6",
 		"react-native-circular-progress-indicator": "^4.4.2",
 		"react-native-gesture-handler": "^2.17.1",
 		"react-native-mask-text": "^0.14.2",
 		"react-native-reanimated": "~3.10.1",
-		"react-native-safe-area-context": "4.10.1",
+		"react-native-safe-area-context": "4.10.5",
 		"tailwind-merge": "^2.3.0",
 		"zustand": "^4.5.2"
 	},

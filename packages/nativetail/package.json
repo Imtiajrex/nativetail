@@ -1,6 +1,6 @@
 {
 	"name": "@nativetail/core",
-	"version": "0.0.7",
+	"version": "0.0.9",
 	"description": "",
 	"main": "index.ts",
 	"scripts": {},
@@ -21,16 +21,13 @@
 		"type": "git",
 		"url": "https://github.com/Imtiajrex/nativetail.git"
 	},
-	"peerDependencies": {
-		"react-native": ">=0.63.0"
-	},
 	"dependencies": {
 		"class-variance-authority": "^0.7.0",
 		"metro-react-native-babel-preset": "^0.77.0",
 		"moti": "^0.29.0",
 		"react": "18.2.0",
 		"react-hook-form": "^7.51.0",
-		"react-native": "0.73.6",
+		"react-native": "0.74.2",
 		"react-native-reanimated": "~3.10.1",
 		"tailwind-merge": "^2.3.0",
 		"zustand": "^4.5.2"

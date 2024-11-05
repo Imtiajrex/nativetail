@@ -114,9 +114,7 @@ const DropdownTrigger = ({
 		}
 	}, [H, W]);
 	const handlePress = useCallback(() => {
-		if (__DEV__) {
-			_measure();
-		}
+		_measure();
 		toggle();
 	}, [toggle, _measure]);
 

@@ -1,5 +1,6 @@
-import { ActivityIndicator, cn, useColor } from "@nativetail/core";
+import { cn, useColor } from "@nativetail/core";
 import { forwardRef } from "react";
+import { ActivityIndicator } from "react-native";
 import { Dialog, DialogMethods, DialogProps } from "../dialog";
 
 export type LoaderProps = Omit<DialogProps, "children"> & {

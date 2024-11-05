@@ -1,11 +1,9 @@
 import React, { useMemo } from "react";
 
 import {
-	ActivityIndicator,
 	cn,
 	ConfigVariants,
 	cva,
-	mergeClasses,
 	Pressable,
 	separateClasses,
 	useColor,
@@ -13,6 +11,7 @@ import {
 	VariantProps,
 } from "@nativetail/core";
 import { MotiPressableProps } from "moti/interactions";
+import { ActivityIndicator } from "react-native";
 import { useComponentTheme } from "../../utils/component-theme";
 
 const buttonVariants = cva(
@@ -140,11 +139,11 @@ const Button = (passedProps: ButtonProps) => {
 				{leftElement}
 				{loading && (
 					<ActivityIndicator
-						className={mergeClasses(
-							"mr-2 h-5 w-5 text-primary-foreground ",
-							textClasses,
-							loadingIndicatorClassName
-						)}
+						style={{
+							marginRight: 8,
+						}}
+						size="small"
+						color={useColor("primary-foreground")}
 					/>
 				)}
 				{children}

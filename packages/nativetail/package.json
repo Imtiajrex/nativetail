@@ -1,6 +1,6 @@
 {
 	"name": "@nativetail/core",
-	"version": "0.0.11",
+	"version": "0.0.12",
 	"description": "",
 	"main": "index.ts",
 	"scripts": {},
@@ -24,17 +24,23 @@
 	"dependencies": {
 		"class-variance-authority": "^0.7.0",
 		"moti": "^0.29.0",
-		"react": "18.2.0",
 		"react-hook-form": "^7.51.0",
-		"react-native": "^0.76.3",
-		"react-native-reanimated": "~3.16.7",
 		"tailwind-merge": "^2.3.0",
 		"zustand": "^4.5.2"
 	},
 	"devDependencies": {
 		"tailwindcss": "^3.4.4",
 		"metro-react-native-babel-preset": "^0.77.0",
+		"react-native": "^0.76.3",
+		"react-native-reanimated": "~3.16.7",
+		"react": "18.2.0",
 		"tsup": "^8.1.0"
+	},
+	"peerDependencies": {
+		"react": "*",
+		"react-native": "*",
+		"tailwindcss": "*",
+		"react-native-reanimated": "*"
 	},
 	"private": false
 }

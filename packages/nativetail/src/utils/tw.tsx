@@ -120,6 +120,8 @@ const nonAnimatedClassesSet = [
 	"space-",
 	"p-",
 	"m-",
+	"border",
+	"border-",
 	"text-center",
 	"text-left",
 	"text-right",
